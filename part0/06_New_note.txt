@@ -1,0 +1,15 @@
+title 0.6: New note
+
+note over Browser:
+onsubmit event handler
+prevents page reload
+calls redrawNotes function
+that renders notes on page
+then calls sendToServer function
+that sends POST request
+end note
+note right of Browser: JSON payload
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over Browser,Server: content-type: application/json; charset=utf-8
+Server-->Browser: 201 Created {"message":"note created"}
+

@@ -1,0 +1,21 @@
+title 0.5: Single page app
+
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+note over Browser,Server: content-type: text/html; charset=utf-8
+Server-->Browser: spa - HTML code
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+note over Browser,Server: content-type: text/css; charset=UTF-8
+Server-->Browser: main.css - stylesheet
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+note over Browser,Server: content-type: application/javascript; charset=UTF-8
+Server-->Browser: spa.js - javascript
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+note over Browser,Server: content-type: application/json; charset=utf-8
+Server-->Browser: data.json - data
+note over Browser:
+Browser executes
+onreadystatechange event handler
+that parses data and 
+calls redrawNotes function
+that renders notes on the page
+end note

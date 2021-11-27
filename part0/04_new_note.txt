@@ -1,0 +1,23 @@
+title 0.4: new note
+
+note right of Browser: URL-encoded form data
+Browser->Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+Server-->Browser: 302 URL redirect https://studies.cs.helsinki.fi/exampleapp/notes 
+note over Browser: Browser reloads HTML page
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+note over Browser,Server: content-type: text/html; charset=utf-8
+Server-->Browser: notes - HTML code
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+note over Browser,Server: content-type: text/css; charset=UTF-8
+Server-->Browser: main.css - stylesheet
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+note over Browser,Server: content-type: application/javascript; charset=UTF-8
+Server-->Browser: main.js - javascript
+Browser->Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+note over Browser,Server: content-type: application/json; charset=utf-8
+Server-->Browser: data.json - data
+note over Browser:
+Browser executes
+onreadystatechange event handler
+that renders notes on the page
+end note

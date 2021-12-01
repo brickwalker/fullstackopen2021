@@ -22,11 +22,18 @@ const Header = (props) => {
 };
 
 const Content = (props) => {
-  return props.data.map((el, index) => (
-    <p key={index}>
-      {el.part} {el.exercises}
-    </p>
+  const content = props.data.map((el, index) => (
+    <Part key={index} part={el.part} exercises={el.exercises} />
   ));
+  return content;
+};
+
+const Part = (props) => {
+  return (
+    <p>
+      {props.part} {props.exercises}
+    </p>
+  );
 };
 
 const Total = (props) => {

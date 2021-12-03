@@ -62,6 +62,7 @@ const DailyAnecdote = ({
     </div>
   );
 };
+
 const VotedAnecdote = ({ maxAnecdote, maxVotes }) => {
   return (
     <div>

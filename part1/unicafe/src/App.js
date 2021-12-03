@@ -43,12 +43,19 @@ const Feedback = ({ onClick }) => {
 };
 
 const Statistics = ({ good, neutral, bad }) => {
+  const all = good + neutral + bad;
+  const averageScore =
+    all === 0 ? 0 : (good * 1 + neutral * 0 + bad * -1) / all;
+  const positivePercent = all === 0 ? 0 : (good / all) * 100;
   return (
     <div>
       <h1>statistics</h1>
       <p>good {good}</p>
       <p>neutral {neutral}</p>
       <p>bad {bad}</p>
+      <p>all {all}</p>
+      <p>average {averageScore}</p>
+      <p>positive {positivePercent} %</p>
     </div>
   );
 };

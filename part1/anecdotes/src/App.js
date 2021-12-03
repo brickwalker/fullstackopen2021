@@ -14,6 +14,10 @@ const App = () => {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
 
+  const maxVotes = Math.max(...votes);
+  const maxIndex = votes.indexOf(maxVotes);
+  const maxAnecdote = anecdotes[maxIndex];
+
   const selectRandom = () => {
     const randomNumber = Math.floor(Math.random() * anecdotes.length);
     setSelected(randomNumber);
@@ -27,12 +31,51 @@ const App = () => {
 
   return (
     <div>
+      <DailyAnecdote
+        anecdotes={anecdotes}
+        selected={selected}
+        selectRandom={selectRandom}
+        votes={votes}
+        addVote={addVote}
+      />
+      <VotedAnecdote maxAnecdote={maxAnecdote} maxVotes={maxVotes} />
+    </div>
+  );
+};
+
+const DailyAnecdote = ({
+  anecdotes,
+  selected,
+  selectRandom,
+  votes,
+  addVote,
+}) => {
+  return (
+    <div>
+      <h1>Anecdote of the day</h1>
       <p>{anecdotes[selected]}</p>
       <p>
         has {votes[selected]} {votes[selected] === 1 ? "vote" : "votes"}
       </p>
       <button onClick={addVote}>vote</button>
       <button onClick={selectRandom}>next anecdote</button>
+    </div>
+  );
+};
+const VotedAnecdote = ({ maxAnecdote, maxVotes }) => {
+  return (
+    <div>
+      <h1>Anecdote with most votes</h1>
+      {maxVotes === 0 ? (
+        <p>There are no votes</p>
+      ) : (
+        <div>
+          <p>{maxAnecdote}</p>
+          <p>
+            has {maxVotes} {maxVotes === 1 ? "vote" : "votes"}
+          </p>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas", phone: 11111 }]);
+  const [persons, setPersons] = useState([]);
   const [name, setNewName] = useState("");
   const [phone, setNewPhone] = useState("");
+  const [filterEntry, setFilterEntry] = useState("");
 
   const handleNameEntry = (event) => setNewName(event.target.value);
   const handlePhoneEntry = (event) => setNewPhone(event.target.value);
+  const handleFilterEntry = (event) => setFilterEntry(event.target.value);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     if (persons.find((element) => element.name === name)) {
       alert(`${name} is already added to phonebook`);
     } else {
-      setPersons([...persons, { name, phone }]);
+      const id = persons.length > 0 ? persons[persons.length - 1].id + 1 : 1;
+      setPersons([...persons, { name, phone, id }]);
     }
     setNewName("");
     setNewPhone("");
@@ -22,6 +25,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Filter filterEntry={filterEntry} handleFilterEntry={handleFilterEntry} />
       <NewEntry
         name={name}
         handleNameEntry={handleNameEntry}
@@ -29,24 +33,23 @@ const App = () => {
         handlePhoneEntry={handlePhoneEntry}
         handleSubmit={handleSubmit}
       />
-      <DisplayEntry entries={persons} />
+      <DisplayEntry entries={persons} filterEntry={filterEntry} />
     </div>
   );
 };
 
-// const Filter = () => {
-//   return (
-//     <form>
-//       <fieldset>
-//         <legend>Add a new</legend>
-//         <label>
-//           name: <input value={props.name} onChange={props.handleNameEntry} />
-//         </label>
-//         <button type="submit">add</button>
-//       </fieldset>
-//     </form>
-//   );
-// }
+const Filter = ({ filterEntry, handleFilterEntry }) => {
+  return (
+    <form>
+      <fieldset>
+        <legend>Filter</legend>
+        <label>
+          by name: <input value={filterEntry} onChange={handleFilterEntry} />
+        </label>
+      </fieldset>
+    </form>
+  );
+};
 
 const NewEntry = (props) => {
   return (
@@ -55,11 +58,7 @@ const NewEntry = (props) => {
         <legend>Add a new</legend>
         <label>
           name:{" "}
-          <input
-            value={props.name}
-            onChange={props.handleNameEntry}
-            required
-          />
+          <input value={props.name} onChange={props.handleNameEntry} required />
         </label>
         <br />
         <label>
@@ -77,14 +76,25 @@ const NewEntry = (props) => {
   );
 };
 
-const DisplayEntry = ({ entries }) => {
+const DisplayEntry = ({ entries, filterEntry }) => {
+  const filteredEntries = filterEntry
+    ? entries.filter((entry) =>
+        entry.name.toLowerCase().includes(filterEntry.toLowerCase())
+      )
+    : entries;
   return (
     <div>
       <h2>Numbers</h2>
       <ul>
-        {entries.map((entry) => (
-          <li key={entry.name}>{entry.name} {entry.phone}</li>
-        ))}
+        {filteredEntries.length > 0 ? (
+          filteredEntries.map((entry) => (
+            <li key={entry.id}>
+              {entry.name} {entry.phone}
+            </li>
+          ))
+        ) : (
+          <li>No entries to display</li>
+        )}
       </ul>
     </div>
   );

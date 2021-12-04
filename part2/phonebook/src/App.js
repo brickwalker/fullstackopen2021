@@ -8,7 +8,11 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setPersons([...persons, { name: newName }]);
+    if (persons.find((element) => element.name === newName)) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      setPersons([...persons, { name: newName }]);
+    }
     setNewName("");
   };
 
@@ -39,12 +43,14 @@ const NewEntry = (props) => {
   );
 };
 
-const DisplayEntry = ({entries}) => {
+const DisplayEntry = ({ entries }) => {
   return (
     <div>
       <h2>Numbers</h2>
       <ul>
-        {entries.map(entry => <li key={entry.name}>{entry.name}</li>)}
+        {entries.map((entry) => (
+          <li key={entry.name}>{entry.name}</li>
+        ))}
       </ul>
     </div>
   );

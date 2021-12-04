@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import Filter from "./components/Filter";
+import NewEntry from "./components/NewEntry";
+import DisplayEntry from "./components/DisplayEntry";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -34,68 +37,6 @@ const App = () => {
         handleSubmit={handleSubmit}
       />
       <DisplayEntry entries={persons} filterEntry={filterEntry} />
-    </div>
-  );
-};
-
-const Filter = ({ filterEntry, handleFilterEntry }) => {
-  return (
-    <form>
-      <fieldset>
-        <legend>Filter</legend>
-        <label>
-          by name: <input value={filterEntry} onChange={handleFilterEntry} />
-        </label>
-      </fieldset>
-    </form>
-  );
-};
-
-const NewEntry = (props) => {
-  return (
-    <form onSubmit={props.handleSubmit}>
-      <fieldset>
-        <legend>Add a new</legend>
-        <label>
-          name:{" "}
-          <input value={props.name} onChange={props.handleNameEntry} required />
-        </label>
-        <br />
-        <label>
-          number:{" "}
-          <input
-            value={props.phone}
-            onChange={props.handlePhoneEntry}
-            required
-          />
-        </label>
-        <br />
-        <button type="submit">add</button>
-      </fieldset>
-    </form>
-  );
-};
-
-const DisplayEntry = ({ entries, filterEntry }) => {
-  const filteredEntries = filterEntry
-    ? entries.filter((entry) =>
-        entry.name.toLowerCase().includes(filterEntry.toLowerCase())
-      )
-    : entries;
-  return (
-    <div>
-      <h2>Numbers</h2>
-      <ul>
-        {filteredEntries.length > 0 ? (
-          filteredEntries.map((entry) => (
-            <li key={entry.id}>
-              {entry.name} {entry.phone}
-            </li>
-          ))
-        ) : (
-          <li>No entries to display</li>
-        )}
-      </ul>
     </div>
   );
 };

@@ -6,6 +6,9 @@ const App = () => {
   const [filter, setFilter] = useState("");
 
   const handleFilter = (event) => setFilter(event.target.value);
+  const showSingleCountry = (event) => {
+    setFilter(event.target.previousSibling.data);
+  };
 
   useEffect(() => {
     axios
@@ -16,7 +19,11 @@ const App = () => {
   return (
     <div>
       <Filter text={filter} onChange={handleFilter} />
-      <Display items={countries} filter={filter} />
+      <Display
+        items={countries}
+        filter={filter}
+        showSingleCountry={showSingleCountry}
+      />
     </div>
   );
 };
@@ -31,12 +38,13 @@ const Filter = ({ text, onChange }) => {
   );
 };
 
-const Display = ({ items, filter }) => {
+const Display = ({ items, filter, showSingleCountry }) => {
   const filteredItems = [
     ...items.filter((item) =>
       item.name.common.toLowerCase().includes(filter.toLowerCase())
     ),
   ];
+
   let output;
   if (filteredItems.length === 0 || filter.length === 0) {
     output = <div>Use above field to find countries.</div>;
@@ -47,36 +55,40 @@ const Display = ({ items, filter }) => {
       <div>
         <ul>
           {filteredItems.map((filteredItem) => (
-            <li key={filteredItem.name.common}>{filteredItem.name.common}</li>
+            <li key={filteredItem.name.common}>
+              {filteredItem.name.common}
+              <button onClick={showSingleCountry}>show</button>
+            </li>
           ))}
         </ul>
       </div>
     );
   } else {
     // Where only one match
-    let languagesArray = [];
-    for (const key in filteredItems[0].languages) {
-      languagesArray.push(filteredItems[0].languages[key]);
-    }
-    output = (
-      <div>
-        <h2>{filteredItems[0].name.common}</h2>
-        <p>capital {filteredItems[0].capital}</p>
-        <p>population {filteredItems[0].population}</p>
-        <h2>languages</h2>
-        <ul>
-          {languagesArray.map((language) => (
-            <li key={language}>{language}</li>
-          ))}
-        </ul>
-        <img
-          src={filteredItems[0].flags.png}
-          alt={`flag of ${filteredItems[0].name.common}`}
-        />
-      </div>
-    );
+    output = <CountryView country={filteredItems[0]} />;
   }
   return output;
+};
+
+const CountryView = ({ country }) => {
+  let languagesArray = [];
+  for (const key in country.languages) {
+    languagesArray.push(country.languages[key]);
+  }
+  return (
+    <div>
+      <h2>{country.name.common}</h2>
+      <p>capital {country.capital}</p>
+      <p>population {country.population}</p>
+      <h2>languages</h2>
+      <ul>
+        {languagesArray.map((language) => (
+          <li key={language}>{language}</li>
+        ))}
+      </ul>
+      <img src={country.flags.png} alt={`flag of ${country.name.common}`} />
+    </div>
+  );
 };
 
 export default App;

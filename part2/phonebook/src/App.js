@@ -1,13 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import NewEntry from "./components/NewEntry";
 import DisplayEntry from "./components/DisplayEntry";
+import axios from "axios";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [name, setNewName] = useState("");
   const [phone, setNewPhone] = useState("");
   const [filterEntry, setFilterEntry] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3001/persons")
+      .then((response) => setPersons(response.data));
+  }, []);
 
   const handleNameEntry = (event) => setNewName(event.target.value);
   const handlePhoneEntry = (event) => setNewPhone(event.target.value);

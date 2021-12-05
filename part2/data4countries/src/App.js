@@ -4,17 +4,34 @@ import axios from "axios";
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [filter, setFilter] = useState("");
+  const [capital, setCapital] = useState("");
+  const [weather, setWeather] = useState({});
 
   const handleFilter = (event) => setFilter(event.target.value);
   const showSingleCountry = (event) => {
     setFilter(event.target.previousSibling.data);
   };
+  const provideCapital = (name) => setCapital(name);
 
   useEffect(() => {
     axios
       .get("https://restcountries.com/v3.1/all")
       .then((response) => setCountries(response.data));
   }, []);
+
+  useEffect(() => {
+    if (capital) {
+      const weatherUrl = `http://api.openweathermap.org/data/2.5/weather?q=${capital}&appid=${process.env.REACT_APP_API_KEY}&units=metric`;
+      axios.get(weatherUrl).then((response) => {
+        setWeather({
+          description: response.data.weather[0].description,
+          imageUrl: `https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png`,
+          temperatureCelsius: response.data.main.temp,
+          windKmph: response.data.wind.speed,
+        });
+      });
+    }
+  }, [capital]);
 
   return (
     <div>
@@ -23,6 +40,8 @@ const App = () => {
         items={countries}
         filter={filter}
         showSingleCountry={showSingleCountry}
+        provideCapital={provideCapital}
+        weather={weather}
       />
     </div>
   );
@@ -38,7 +57,13 @@ const Filter = ({ text, onChange }) => {
   );
 };
 
-const Display = ({ items, filter, showSingleCountry }) => {
+const Display = ({
+  items,
+  filter,
+  showSingleCountry,
+  provideCapital,
+  weather,
+}) => {
   const filteredItems = [
     ...items.filter((item) =>
       item.name.common.toLowerCase().includes(filter.toLowerCase())
@@ -65,12 +90,13 @@ const Display = ({ items, filter, showSingleCountry }) => {
     );
   } else {
     // Where only one match
-    output = <CountryView country={filteredItems[0]} />;
+    provideCapital(filteredItems[0].capital);
+    output = <CountryView country={filteredItems[0]} weather={weather} />;
   }
   return output;
 };
 
-const CountryView = ({ country }) => {
+const CountryView = ({ country, weather }) => {
   let languagesArray = [];
   for (const key in country.languages) {
     languagesArray.push(country.languages[key]);
@@ -87,6 +113,11 @@ const CountryView = ({ country }) => {
         ))}
       </ul>
       <img src={country.flags.png} alt={`flag of ${country.name.common}`} />
+      <h2>Weather in {country.capital}</h2>
+      <p><strong>{weather.description}</strong></p>
+      <img src={weather.imageUrl} alt={weather.description} />
+      <p><strong>temperature: </strong>{weather.temperatureCelsius} C&deg;</p>
+      <p><strong>wind: </strong>{weather.windKmph} km/h</p>
     </div>
   );
 };

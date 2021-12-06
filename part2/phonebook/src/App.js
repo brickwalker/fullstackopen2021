@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import NewEntry from "./components/NewEntry";
 import DisplayEntry from "./components/DisplayEntry";
-import axios from "axios";
+import contactService from "./services/contacts";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -10,10 +10,8 @@ const App = () => {
   const [phone, setNewPhone] = useState("");
   const [filterEntry, setFilterEntry] = useState("");
 
-  const dbUrl = "http://localhost:3001/persons";
-
   useEffect(() => {
-    axios.get(dbUrl).then((response) => setPersons(response.data));
+    contactService.getAll().then((data) => setPersons(data));
   }, []);
 
   const handleNameEntry = (event) => setNewName(event.target.value);
@@ -25,9 +23,9 @@ const App = () => {
     if (persons.find((element) => element.name === name)) {
       alert(`${name} is already added to phonebook`);
     } else {
-      axios
-        .post(dbUrl, { name, phone })
-        .then((response) => setPersons([...persons, response.data]));
+      contactService
+        .createEntry({ name, phone })
+        .then((data) => setPersons([...persons, data]));
     }
     setNewName("");
     setNewPhone("");

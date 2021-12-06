@@ -1,11 +1,6 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "phone": "040-123456",
-      "id": 1
-    },
-    {
       "name": "Ada Lovelace",
       "phone": "39-44-5323523",
       "id": 2
@@ -19,31 +14,6 @@
       "name": "Mary Poppendieck",
       "phone": "39-23-6423122",
       "id": 4
-    },
-    {
-      "name": "Artem",
-      "phone": "888222",
-      "id": 5
-    },
-    {
-      "name": "Sasha Pish",
-      "phone": "112233",
-      "id": 6
-    },
-    {
-      "name": "Gregory hopkins",
-      "phone": "1112223",
-      "id": 7
-    },
-    {
-      "name": "Blue Moon",
-      "phone": "238",
-      "id": 8
-    },
-    {
-      "name": "Pasha Yarovyi",
-      "phone": "1283",
-      "id": 9
     }
   ]
 }

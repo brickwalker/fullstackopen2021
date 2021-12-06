@@ -1,6 +1,6 @@
 import React from "react";
 
-const DisplayEntry = ({ entries, filterEntry }) => {
+const DisplayEntry = ({ entries, filterEntry, handleDelete }) => {
   const filteredEntries = filterEntry
     ? entries.filter((entry) =>
         entry.name.toLowerCase().includes(filterEntry.toLowerCase())
@@ -13,7 +13,10 @@ const DisplayEntry = ({ entries, filterEntry }) => {
         {filteredEntries.length > 0 ? (
           filteredEntries.map((entry) => (
             <li key={entry.id}>
-              {entry.name} {entry.phone}
+              {entry.name} {entry.phone}{" "}
+              <button id={entry.id} onClick={handleDelete}>
+                delete
+              </button>
             </li>
           ))
         ) : (

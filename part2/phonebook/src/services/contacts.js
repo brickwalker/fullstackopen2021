@@ -9,9 +9,14 @@ const createEntry = (newObject) => {
   return axios.post(baseUrl, newObject).then((response) => response.data);
 };
 
+const deleteEntry = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
 const contacts = {
   getAll,
   createEntry,
+  deleteEntry,
 };
 
 export default contacts;

@@ -31,6 +31,19 @@ const App = () => {
     setNewPhone("");
   };
 
+  const handleDelete = (event) => {
+    const id = event.target.id;
+    const contact = event.target.previousSibling.wholeText;
+    const confirmed = window.confirm(`Do you want to remove this entry?\n${contact}`);
+    if (confirmed) {
+      contactService.deleteEntry(id).then((response) => {
+        response.statusText === "OK"
+          ? setPersons(persons.filter((person) => person.id !== parseInt(id)))
+          : alert(`Server cannot remove entry with ID ${id}`);
+      });
+    }
+  };
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -42,7 +55,11 @@ const App = () => {
         handlePhoneEntry={handlePhoneEntry}
         handleSubmit={handleSubmit}
       />
-      <DisplayEntry entries={persons} filterEntry={filterEntry} />
+      <DisplayEntry
+        entries={persons}
+        filterEntry={filterEntry}
+        handleDelete={handleDelete}
+      />
     </div>
   );
 };

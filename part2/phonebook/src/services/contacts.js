@@ -13,10 +13,17 @@ const deleteEntry = (id) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
 
+const updateEntry = (id, newObject) => {
+  return axios
+    .put(`${baseUrl}/${id}`, newObject)
+    .then((response) => response.data);
+};
+
 const contacts = {
   getAll,
   createEntry,
   deleteEntry,
+  updateEntry,
 };
 
 export default contacts;

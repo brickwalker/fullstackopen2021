@@ -21,7 +21,16 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (persons.find((element) => element.name === name)) {
-      alert(`${name} is already added to phonebook`);
+      const confirmed = window.confirm(`${name} is already added to phonebook.
+Replace the old number with a new one?`);
+      if (confirmed) {
+        const id = persons.find((person) => person.name === name).id;
+        contactService
+          .updateEntry(id, { name, phone })
+          .then((data) =>
+            setPersons([...persons.filter((person) => person.id !== id), data])
+          );
+      }
     } else {
       contactService
         .createEntry({ name, phone })
@@ -34,7 +43,9 @@ const App = () => {
   const handleDelete = (event) => {
     const id = event.target.id;
     const contact = event.target.previousSibling.wholeText;
-    const confirmed = window.confirm(`Do you want to remove this entry?\n${contact}`);
+    const confirmed = window.confirm(
+      `Do you want to remove this entry?\n${contact}`
+    );
     if (confirmed) {
       contactService.deleteEntry(id).then((response) => {
         response.statusText === "OK"

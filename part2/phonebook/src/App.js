@@ -10,10 +10,10 @@ const App = () => {
   const [phone, setNewPhone] = useState("");
   const [filterEntry, setFilterEntry] = useState("");
 
+  const dbUrl = "http://localhost:3001/persons";
+
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/persons")
-      .then((response) => setPersons(response.data));
+    axios.get(dbUrl).then((response) => setPersons(response.data));
   }, []);
 
   const handleNameEntry = (event) => setNewName(event.target.value);
@@ -25,8 +25,9 @@ const App = () => {
     if (persons.find((element) => element.name === name)) {
       alert(`${name} is already added to phonebook`);
     } else {
-      const id = persons.length > 0 ? persons[persons.length - 1].id + 1 : 1;
-      setPersons([...persons, { name, phone, id }]);
+      axios
+        .post(dbUrl, { name, phone })
+        .then((response) => setPersons([...persons, response.data]));
     }
     setNewName("");
     setNewPhone("");

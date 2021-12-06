@@ -19,6 +19,26 @@
       "name": "Mary Poppendieck",
       "phone": "39-23-6423122",
       "id": 4
+    },
+    {
+      "name": "Artem",
+      "phone": "888222",
+      "id": 5
+    },
+    {
+      "name": "Sasha Pish",
+      "phone": "112233",
+      "id": 6
+    },
+    {
+      "name": "Gregory hopkins",
+      "phone": "1112223",
+      "id": 7
+    },
+    {
+      "name": "Blue Moon",
+      "phone": "238",
+      "id": 8
     }
   ]
 }

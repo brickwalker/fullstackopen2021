@@ -27,10 +27,17 @@ const App = () => {
 Replace the old number with a new one?`);
       if (confirmed) {
         const id = persons.find((person) => person.name === name).id;
-        contactService.updateEntry(id, { name, phone }).then((data) => {
-          setPersons([...persons.filter((person) => person.id !== id), data]);
-          setFeedback(`Updated ${name}`);
-        });
+        contactService
+          .updateEntry(id, { name, phone })
+          .then((data) => {
+            setPersons([...persons.filter((person) => person.id !== id), data]);
+            setFeedback(`Updated ${name}`);
+          })
+          .catch(() => {
+            setFeedback(
+              `${name} has already been removed from server. Please refresh the page.`
+            );
+          });
       }
     } else {
       contactService.createEntry({ name, phone }).then((data) => {

@@ -1,0 +1,7 @@
+.feedback {
+  padding: 1em;
+  background-color: lightgray;
+  color: green;
+  border-style: solid;
+  border-radius: 1em;
+}

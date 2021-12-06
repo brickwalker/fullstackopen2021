@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Filter from "./components/Filter";
 import NewEntry from "./components/NewEntry";
 import DisplayEntry from "./components/DisplayEntry";
+import Feedback from "./components/Feedback";
 import contactService from "./services/contacts";
 
 const App = () => {
@@ -9,6 +10,7 @@ const App = () => {
   const [name, setNewName] = useState("");
   const [phone, setNewPhone] = useState("");
   const [filterEntry, setFilterEntry] = useState("");
+  const [feedback, setFeedback] = useState();
 
   useEffect(() => {
     contactService.getAll().then((data) => setPersons(data));
@@ -25,17 +27,18 @@ const App = () => {
 Replace the old number with a new one?`);
       if (confirmed) {
         const id = persons.find((person) => person.name === name).id;
-        contactService
-          .updateEntry(id, { name, phone })
-          .then((data) =>
-            setPersons([...persons.filter((person) => person.id !== id), data])
-          );
+        contactService.updateEntry(id, { name, phone }).then((data) => {
+          setPersons([...persons.filter((person) => person.id !== id), data]);
+          setFeedback(`Updated ${name}`);
+        });
       }
     } else {
-      contactService
-        .createEntry({ name, phone })
-        .then((data) => setPersons([...persons, data]));
+      contactService.createEntry({ name, phone }).then((data) => {
+        setPersons([...persons, data]);
+        setFeedback(`Added ${name}`);
+      });
     }
+    setTimeout(() => setFeedback(null), 5000);
     setNewName("");
     setNewPhone("");
   };
@@ -48,9 +51,13 @@ Replace the old number with a new one?`);
     );
     if (confirmed) {
       contactService.deleteEntry(id).then((response) => {
-        response.statusText === "OK"
-          ? setPersons(persons.filter((person) => person.id !== parseInt(id)))
-          : alert(`Server cannot remove entry with ID ${id}`);
+        if (response.statusText === "OK") {
+          setPersons(persons.filter((person) => person.id !== parseInt(id)));
+          setFeedback(`Deleted ${contact}`);
+          setTimeout(() => setFeedback(null), 5000);
+        } else {
+          alert(`Server cannot remove entry with ID ${id}`);
+        }
       });
     }
   };
@@ -58,6 +65,7 @@ Replace the old number with a new one?`);
   return (
     <div>
       <h2>Phonebook</h2>
+      <Feedback feedback={feedback} />
       <Filter filterEntry={filterEntry} handleFilterEntry={handleFilterEntry} />
       <NewEntry
         name={name}

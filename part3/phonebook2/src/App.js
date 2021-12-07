@@ -77,7 +77,7 @@ Replace the old number with a new one?`);
       <NewEntry
         name={name}
         handleNameEntry={handleNameEntry}
-        phone={number}
+        number={number}
         handlePhoneEntry={handlePhoneEntry}
         handleSubmit={handleSubmit}
       />

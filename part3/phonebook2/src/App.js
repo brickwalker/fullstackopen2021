@@ -58,7 +58,6 @@ Replace the old number with a new one?`);
     );
     if (confirmed) {
       contactService.deleteEntry(id).then((response) => {
-        console.log(response);
         if (response.status === 204) {
           setPersons(persons.filter((person) => person.id !== parseInt(id)));
           setFeedback(`Deleted ${contact}`);

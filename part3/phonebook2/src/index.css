@@ -1,0 +1,14 @@
+.feedback {
+  padding: 1em;
+  background-color: lightgray;
+  border-style: solid;
+  border-radius: 1em;
+}
+
+.failure {
+  color: red;
+}
+
+.success {
+  color: green;
+}

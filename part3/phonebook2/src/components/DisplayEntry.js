@@ -12,9 +12,9 @@ const DisplayEntry = ({ entries, filterEntry, handleDelete }) => {
       <ul>
         {filteredEntries.length > 0 ? (
           filteredEntries.map((entry) => (
-            <li key={entry.id}>
+            <li key={entry._id}>
               {entry.name} {entry.number}{" "}
-              <button id={entry.id} onClick={handleDelete}>
+              <button id={entry._id} onClick={handleDelete}>
                 delete
               </button>
             </li>

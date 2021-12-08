@@ -59,7 +59,7 @@ Replace the old number with a new one?`);
     if (confirmed) {
       contactService.deleteEntry(id).then((response) => {
         if (response.status === 204) {
-          setPersons(persons.filter((person) => person.id !== parseInt(id)));
+          setPersons(persons.filter((person) => person._id !== id));
           setFeedback(`Deleted ${contact}`);
           setTimeout(() => setFeedback(null), 5000);
         } else {

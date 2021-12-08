@@ -26,7 +26,7 @@ const App = () => {
       const confirmed = window.confirm(`${name} is already added to phonebook.
 Replace the old number with a new one?`);
       if (confirmed) {
-        const id = persons.find((person) => person.name === name).id;
+        const id = persons.find((person) => person.name === name)._id;
         contactService
           .updateEntry(id, { name, number })
           .then((data) => {

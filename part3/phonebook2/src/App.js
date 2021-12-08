@@ -30,24 +30,42 @@ Replace the old number with a new one?`);
         contactService
           .updateEntry(id, { name, number })
           .then((data) => {
-            setPersons([...persons.filter((person) => person._id !== id), data]);
+            setPersons([
+              ...persons.filter((person) => person._id !== id),
+              data,
+            ]);
             setFeedback(`Updated ${name}`);
+            setNewName("");
+            setNumber("");
           })
-          .catch(() => {
-            setFeedback(
-              `${name} has already been removed from server. Please refresh the page.`
-            );
+          .catch((error) => {
+            const errorText = error.response.data.error;
+            if (errorText) {
+              setFeedback(errorText);
+            } else {
+              setFeedback(
+                `${name} has already been removed from server. Please refresh the page.`
+              );
+            }
           });
       }
     } else {
-      contactService.createEntry({ name, number }).then((data) => {
-        setPersons([...persons, data]);
-        setFeedback(`Added ${name}`);
-      });
+      contactService
+        .createEntry({ name, number })
+        .then((data) => {
+          setPersons([...persons, data]);
+          setFeedback(`Added ${name}`);
+          setNewName("");
+          setNumber("");
+        })
+        .catch((error) => {
+          const errorText = error.response.data.error;
+          if (errorText) {
+            setFeedback(errorText);
+          }
+        });
     }
     setTimeout(() => setFeedback(null), 5000);
-    setNewName("");
-    setNumber("");
   };
 
   const handleDelete = (event) => {

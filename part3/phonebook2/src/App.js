@@ -30,7 +30,7 @@ Replace the old number with a new one?`);
         contactService
           .updateEntry(id, { name, number })
           .then((data) => {
-            setPersons([...persons.filter((person) => person.id !== id), data]);
+            setPersons([...persons.filter((person) => person._id !== id), data]);
             setFeedback(`Updated ${name}`);
           })
           .catch(() => {

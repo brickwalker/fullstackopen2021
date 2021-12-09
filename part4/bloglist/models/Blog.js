@@ -1,11 +1,20 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const blogSchema = new mongoose.Schema({
-  title: { type: String, required: true, minLength: 2, maxLength: 64 },
-  author: { type: String, required: true, minLength: 2, maxLength: 24 },
-  url: { type: String, required: true, minLength: 2, maxLength: 24 },
+  title: { type: String, required: true, minLength: 2, maxLength: 128 },
+  author: { type: String, required: true, minLength: 2, maxLength: 64 },
+  url: {
+    type: String,
+    required: true,
+    minLength: 2,
+    maxLength: 128,
+    unique: true,
+  },
   likes: { type: Number, max: 1000 * 1000 * 1000 },
 });
+
+blogSchema.plugin(uniqueValidator);
 
 blogSchema.set("toJSON", {
   transform: (document, returnedObject) => {

@@ -89,3 +89,46 @@ describe("prolific author", () => {
     expect(result).toEqual(prolificAuthor);
   });
 });
+
+describe("liked author", () => {
+  const allBlogs = [
+    {
+      title: "Karifood",
+      author: "Olga Kari",
+      url: "https://karifood.com/",
+      likes: 5000,
+      id: "61b1d4f6e937420f72deebff",
+    },
+    {
+      title: "Klopotenko recipes",
+      author: "Eugen Klopotenko",
+      url: "https://klopotenko.com/uk/",
+      likes: 197000,
+      id: "61b1d5c4e937420f72deec02",
+    },
+    {
+      title: "Klopotenko recipes",
+      author: "Eugen Klopotenko",
+      url: "https://klopotenko.com/uk/",
+      likes: 197000,
+      id: "61b1d5c4e937420f72deec02",
+    },
+    {
+      title: "Karifood",
+      author: "Olga Kari",
+      url: "https://karifood.com/",
+      likes: 5000,
+      id: "61b1d4f6e937420f72deebff",
+    },
+  ];
+
+  test("should return author with most likes", () => {
+    const likedAuthor = {
+      author: "Eugen Klopotenko",
+      likes: 394000,
+    };
+
+    const result = listHelper.mostLikes(allBlogs);
+    expect(result).toEqual(likedAuthor);
+  });
+});

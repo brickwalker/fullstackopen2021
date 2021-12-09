@@ -1,0 +1,20 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Karifood",
+    "author": "Olga Kari",
+    "url": "https://karifood.com/",
+    "likes": 5000
+}
+
+###
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+
+{
+    "title": "Klopotenko recipes",
+    "author": "Eugen Klopotenko",
+    "url": "https://klopotenko.com/uk/",
+    "likes": 197000
+}

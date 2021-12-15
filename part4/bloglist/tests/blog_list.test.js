@@ -33,14 +33,42 @@ describe("blog list tests", () => {
     await api
       .get("/api/blogs")
       .expect("Content-Type", /application\/json/)
-      .expect(200);
-    const response = await api.get("/api/blogs");
-    expect(response.body).toHaveLength(initialBlogs.length);
+      .expect(200)
+      .then((response) =>
+        expect(response.body).toHaveLength(initialBlogs.length)
+      );
   });
 
-  test("should have id property", async () => {
+  test("blog entry should have id property", async () => {
     const response = await api.get("/api/blogs");
     expect(response.body[0].id).toBeDefined();
+  });
+
+  test("adding blog should work", async () => {
+    const newBlog = {
+      title: "Tandicook",
+      author: "Olia",
+      url: "https://tandicook.com.ua/",
+      likes: 2000,
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/);
+
+    await api
+      .get("/api/blogs")
+      .expect("Content-Type", /application\/json/)
+      .expect(200)
+      .then((response) => {
+        expect(response.body).toHaveLength(initialBlogs.length + 1);
+        const newBlogReplied = response.body.filter(
+          (el) => el.url === "https://tandicook.com.ua/"
+        )[0];
+        expect(newBlogReplied).toMatchObject(newBlog);
+      });
   });
 
   afterAll(() => {

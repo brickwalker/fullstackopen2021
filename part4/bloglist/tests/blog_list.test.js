@@ -104,6 +104,12 @@ describe("blog list tests", () => {
     await api.post("/api/blogs").send(newBlog).expect(400);
   });
 
+  test("should remove blog with specific id", async () => {
+    const responseAll = await api.get("/api/blogs");
+    const blogToRemove = responseAll.body[0];
+    await api.delete(`/api/blogs/${blogToRemove.id}`).expect(204);
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });

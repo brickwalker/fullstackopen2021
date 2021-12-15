@@ -5,30 +5,30 @@ const Blog = require("../models/Blog");
 
 const api = supertest(app);
 
-describe("blog list tests", () => {
-  const initialBlogs = [
-    {
-      title: "Karifood",
-      author: "Olga Kari",
-      url: "https://karifood.com/",
-      likes: 5000,
-    },
-    {
-      title: "Klopotenko recipes",
-      author: "Eugen Klopotenko",
-      url: "https://klopotenko.com/uk/",
-      likes: 197000,
-    },
-  ];
+const initialBlogs = [
+  {
+    title: "Karifood",
+    author: "Olga Kari",
+    url: "https://karifood.com/",
+    likes: 5000,
+  },
+  {
+    title: "Klopotenko recipes",
+    author: "Eugen Klopotenko",
+    url: "https://klopotenko.com/uk/",
+    likes: 197000,
+  },
+];
 
-  beforeEach(async () => {
-    await Blog.deleteMany({});
-    for (const blog of initialBlogs) {
-      const blogObject = new Blog(blog);
-      await blogObject.save();
-    }
-  });
+beforeEach(async () => {
+  await Blog.deleteMany({});
+  for (const blog of initialBlogs) {
+    const blogObject = new Blog(blog);
+    await blogObject.save();
+  }
+});
 
+describe("get blogs", () => {
   test("should return correct number of blog posts", async () => {
     await api
       .get("/api/blogs")
@@ -43,7 +43,9 @@ describe("blog list tests", () => {
     const response = await api.get("/api/blogs");
     expect(response.body[0].id).toBeDefined();
   });
+});
 
+describe("add blogs", () => {
   test("adding blog should work", async () => {
     const newBlog = {
       title: "Tandicook",
@@ -103,7 +105,9 @@ describe("blog list tests", () => {
 
     await api.post("/api/blogs").send(newBlog).expect(400);
   });
+});
 
+describe("update / delete blogs", () => {
   test("should remove blog with specific id", async () => {
     const responseAll = await api.get("/api/blogs");
     const blogToRemove = responseAll.body[0];
@@ -113,15 +117,14 @@ describe("blog list tests", () => {
   test("should update blog with specific id", async () => {
     const responseAll = await api.get("/api/blogs");
     const blogToUpdate = responseAll.body[0];
-    console.log("TOUPDATE", blogToUpdate);
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
       .send({ title: "Kari" })
       .expect(200)
       .then((response) => expect(response.body.title).toBe("Kari"));
   });
+});
 
-  afterAll(() => {
-    mongoose.connection.close();
-  });
+afterAll(() => {
+  mongoose.connection.close();
 });

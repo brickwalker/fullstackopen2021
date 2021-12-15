@@ -10,12 +10,7 @@ blogsRouter.get("/", (request, response, next) => {
 });
 
 blogsRouter.post("/", (request, response, next) => {
-  const postData = { ...request.body };
-  if (!(postData.likes >= 0)) {
-    postData.likes = 0;
-  }
-
-  const blog = new Blog(postData);
+  const blog = new Blog(request.body);
 
   blog
     .save()
@@ -30,6 +25,14 @@ blogsRouter.delete("/:id", (request, response, next) => {
 
   Blog.findOneAndDelete({ _id: id })
     .then((result) => response.status(204).json(result))
+    .catch((error) => next(error));
+});
+
+blogsRouter.put("/:id", (request, response, next) => {
+  const id = request.params.id;
+
+  Blog.findOneAndUpdate({ _id: id }, request.body, {new: true})
+    .then((result) => response.status(200).json(result))
     .catch((error) => next(error));
 });
 

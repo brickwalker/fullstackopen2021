@@ -11,7 +11,7 @@ const blogSchema = new mongoose.Schema({
     maxLength: 128,
     unique: true,
   },
-  likes: { type: Number, max: 1000 * 1000 * 1000 },
+  likes: { type: Number, default: 0, max: 1000 * 1000 * 1000 },
 });
 
 blogSchema.plugin(uniqueValidator);

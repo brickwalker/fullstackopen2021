@@ -110,6 +110,17 @@ describe("blog list tests", () => {
     await api.delete(`/api/blogs/${blogToRemove.id}`).expect(204);
   });
 
+  test("should update blog with specific id", async () => {
+    const responseAll = await api.get("/api/blogs");
+    const blogToUpdate = responseAll.body[0];
+    console.log("TOUPDATE", blogToUpdate);
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ title: "Kari" })
+      .expect(200)
+      .then((response) => expect(response.body.title).toBe("Kari"));
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });

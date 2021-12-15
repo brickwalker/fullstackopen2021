@@ -88,6 +88,22 @@ describe("blog list tests", () => {
       );
   });
 
+  test("should return 400 Bad Request if title and/or url properties missing", async () => {
+    // const newBlog = {
+    //   title: "Tandicook",
+    //   author: "Olia",
+    //   url: "https://tandicook.com.ua/",
+    //   likes: 2000
+    // };
+
+    const newBlog = {
+      author: "Olia",
+      likes: 2000,
+    };
+
+    await api.post("/api/blogs").send(newBlog).expect(400);
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });

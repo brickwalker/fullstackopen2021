@@ -71,6 +71,23 @@ describe("blog list tests", () => {
       });
   });
 
+  test("adding blog without likes should set likes to 0", async () => {
+    const newBlog = {
+      title: "Tandicook",
+      author: "Olia",
+      url: "https://tandicook.com.ua/",
+    };
+
+    await api
+      .post("/api/blogs")
+      .send(newBlog)
+      .expect(201)
+      .expect("Content-Type", /application\/json/)
+      .then((response) =>
+        expect(response.body.likes).toBeGreaterThanOrEqual(0)
+      );
+  });
+
   afterAll(() => {
     mongoose.connection.close();
   });

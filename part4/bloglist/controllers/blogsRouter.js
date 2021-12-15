@@ -10,7 +10,12 @@ blogsRouter.get("/", (request, response, next) => {
 });
 
 blogsRouter.post("/", (request, response, next) => {
-  const blog = new Blog(request.body);
+  const postData = { ...request.body };
+  if (!(postData.likes >= 0)) {
+    postData.likes = 0;
+  }
+
+  const blog = new Blog(postData);
 
   blog
     .save()

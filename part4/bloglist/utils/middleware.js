@@ -1,3 +1,5 @@
+const jwt = require("jsonwebtoken");
+const { JWT_SECRET } = require("../utils/config");
 const logger = require("./logger");
 
 const unknownEndpoint = (req, res) =>
@@ -24,8 +26,22 @@ const extractToken = (req, res, next) => {
   next();
 };
 
+// This middleware must be before extractToken one and before routes
+const extractTokenId = (req, res, next) => {
+  const decodedToken = jwt.verify(req.token, JWT_SECRET);
+  if (decodedToken) {
+    req.tokenId = decodedToken.id.toString();
+  } else {
+    req.tokenId = null;
+    res.status(401).json({ error: "token missing or invalid" });
+  }
+  
+  next();
+};
+
 module.exports = {
   unknownEndpoint,
   errorHandler,
   extractToken,
+  extractTokenId,
 };

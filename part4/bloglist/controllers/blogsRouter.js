@@ -1,9 +1,7 @@
-const jwt = require("jsonwebtoken");
 const blogsRouter = require("express").Router();
 require("express-async-errors");
 const Blog = require("../models/Blog");
 const User = require("../models/User");
-const { JWT_SECRET } = require("../utils/config");
 
 // This section utilizes express-async-errors which automatically passes errors to next
 blogsRouter.get("/", async (request, response) => {
@@ -15,12 +13,7 @@ blogsRouter.get("/", async (request, response) => {
 // This section utilizes express-async-errors which automatically passes errors to next
 blogsRouter.post("/", async (request, response) => {
   const body = request.body;
-  const decodedToken = jwt.verify(request.token, JWT_SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
-  }
-
-  const user = await User.findById(decodedToken.id);
+  const user = await User.findById(request.tokenId);
   const blog = new Blog({
     title: body.title,
     author: body.author,
@@ -36,15 +29,10 @@ blogsRouter.post("/", async (request, response) => {
 
 // This section utilizes express-async-errors which automatically passes errors to next
 blogsRouter.delete("/:id", async (request, response) => {
-  const decodedToken = jwt.verify(request.token, JWT_SECRET);
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: "token missing or invalid" });
-  }
-
   const id = request.params.id;
   const blog = await Blog.findById(id);
 
-  if (blog.user.toString() === decodedToken.id.toString()) {
+  if (blog.user.toString() === request.tokenId) {
     const deletedBlog = await Blog.findOneAndDelete({ _id: id });
     await User.findOneAndUpdate({ blogs: id }, { $pull: { blogs: id } });
     return response.status(204).json(deletedBlog);

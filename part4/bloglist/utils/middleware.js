@@ -28,12 +28,15 @@ const extractToken = (req, res, next) => {
 
 // This middleware must be before extractToken one and before routes
 const extractTokenId = (req, res, next) => {
+  if (!req.token) {
+    return res.status(401).json({ error: "token missing" });
+  }
   const decodedToken = jwt.verify(req.token, JWT_SECRET);
-  if (decodedToken) {
+  if (decodedToken.id) {
     req.tokenId = decodedToken.id.toString();
   } else {
     req.tokenId = null;
-    res.status(401).json({ error: "token missing or invalid" });
+    res.status(401).json({ error: "invalid token" });
   }
   
   next();

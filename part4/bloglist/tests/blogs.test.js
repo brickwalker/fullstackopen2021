@@ -3,6 +3,7 @@ const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/Blog");
 const User = require("../models/User");
+const { TEMP_TOKEN } = require("../utils/config");
 
 const api = supertest(app);
 
@@ -12,14 +13,14 @@ const initialBlogs = [
     author: "Olga Kari",
     url: "https://karifood.com/",
     likes: 5000,
-    user: "61bb0526663f551718e684d6",
+    user: "61bb943dd80882e6f38f9f22",
   },
   {
     title: "Klopotenko recipes",
     author: "Eugen Klopotenko",
     url: "https://klopotenko.com/uk/",
     likes: 197000,
-    user: "61bb0526663f551718e684d6",
+    user: "61bb943dd80882e6f38f9f22",
   },
 ];
 
@@ -54,17 +55,22 @@ describe("get blogs", () => {
 });
 
 describe("add blogs", () => {
+  test("should fail with status code 401 if token not provided", async () => {
+    await api.post("/api/blogs").send({ property: "value" }).expect(401);
+  });
+
   test("adding blog should work", async () => {
     const newBlog = {
       title: "Tandicook",
       author: "Olia",
       url: "https://tandicook.com.ua/",
       likes: 2000,
-      userId: "61bb0526663f551718e684d6",
+      userId: "61bb943dd80882e6f38f9f22",
     };
 
     await api
       .post("/api/blogs")
+      .set({ "Content-Type": "application/json", Authorization: TEMP_TOKEN })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/);
@@ -81,7 +87,7 @@ describe("add blogs", () => {
 
         // This replaces userId property with name property of same content
         const { userId, ...newBlogNormalized } = newBlog;
-        newBlogNormalized.user = userId;
+        newBlogNormalized.user = { id: userId };
         expect(newBlogReplied).toMatchObject(newBlogNormalized);
       });
   });
@@ -91,17 +97,16 @@ describe("add blogs", () => {
       title: "Tandicook",
       author: "Olia",
       url: "https://tandicook.com.ua/",
-      userId: "61bb0526663f551718e684d6",
+      userId: "61bb943dd80882e6f38f9f22",
     };
 
     await api
       .post("/api/blogs")
+      .set({ "Content-Type": "application/json", Authorization: TEMP_TOKEN })
       .send(newBlog)
       .expect(201)
       .expect("Content-Type", /application\/json/)
-      .then((response) =>
-        expect(response.body.likes).toBeGreaterThanOrEqual(0)
-      );
+      .then((response) => expect(response.body.likes).toBe(0));
   });
 
   test("should return 400 Bad Request if title / url / userId properties missing", async () => {
@@ -110,7 +115,11 @@ describe("add blogs", () => {
       likes: 2000,
     };
 
-    await api.post("/api/blogs").send(newBlog).expect(400);
+    await api
+      .post("/api/blogs")
+      .set({ "Content-Type": "application/json", Authorization: TEMP_TOKEN })
+      .send(newBlog)
+      .expect(400);
   });
 });
 
@@ -118,7 +127,10 @@ describe("update / delete blogs", () => {
   test("should remove blog with specific id", async () => {
     const responseAll = await api.get("/api/blogs");
     const blogToRemove = responseAll.body[0];
-    await api.delete(`/api/blogs/${blogToRemove.id}`).expect(204);
+    await api
+      .delete(`/api/blogs/${blogToRemove.id}`)
+      .set({ "Content-Type": "application/json", Authorization: TEMP_TOKEN })
+      .expect(204);
   });
 
   test("should update blog with specific id", async () => {
@@ -126,6 +138,7 @@ describe("update / delete blogs", () => {
     const blogToUpdate = responseAll.body[0];
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
+      .set({ "Content-Type": "application/json", Authorization: TEMP_TOKEN })
       .send({ title: "Kari" })
       .expect(200)
       .then((response) => expect(response.body.title).toBe("Kari"));

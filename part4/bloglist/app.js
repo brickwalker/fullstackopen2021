@@ -6,6 +6,7 @@ const logger = require("./utils/logger");
 const { MONGO_URI } = require("./utils/config");
 const blogsRouter = require("./controllers/blogsRouter");
 const usersRouter = require("./controllers/usersRouter");
+const loginRouter = require("./controllers/loginRouter");
 const { unknownEndpoint, errorHandler } = require("./utils/middleware");
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(morgan("tiny"));
 app.use(express.json());
 app.use("/api/blogs", blogsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/login", loginRouter);
 app.use(unknownEndpoint);
 app.use(errorHandler);
 

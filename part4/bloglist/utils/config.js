@@ -1,6 +1,6 @@
 require("dotenv").config({ path: ".env.local" });
 
-const { MONGO_CLUSTER, MONGO_DB, MONGO_USR, MONGO_PWD, TEST_MONGO_DB } =
+const { MONGO_CLUSTER, MONGO_DB, MONGO_USR, MONGO_PWD, TEST_MONGO_DB, JWT_SECRET } =
   process.env;
 
 let MONGO_URI;
@@ -13,4 +13,5 @@ const PORT = 3003;
 module.exports = {
   MONGO_URI,
   PORT,
+  JWT_SECRET
 };

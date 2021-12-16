@@ -19,7 +19,7 @@ blogsRouter.post("/", async (request, response) => {
   if (!decodedToken.id) {
     return response.status(401).json({ error: "token missing or invalid" });
   }
-  
+
   const user = await User.findById(decodedToken.id);
   const blog = new Blog({
     title: body.title,
@@ -36,13 +36,21 @@ blogsRouter.post("/", async (request, response) => {
 
 // This section utilizes express-async-errors which automatically passes errors to next
 blogsRouter.delete("/:id", async (request, response) => {
+  const decodedToken = jwt.verify(request.token, JWT_SECRET);
+  if (!decodedToken.id) {
+    return response.status(401).json({ error: "token missing or invalid" });
+  }
+
   const id = request.params.id;
+  const blog = await Blog.findById(id);
 
-  const deletedBlog = await Blog.findOneAndDelete({ _id: id });
+  if (blog.user.toString() === decodedToken.id.toString()) {
+    const deletedBlog = await Blog.findOneAndDelete({ _id: id });
+    await User.findOneAndUpdate({ blogs: id }, { $pull: { blogs: id } });
+    return response.status(204).json(deletedBlog);
+  }
 
-  await User.findOneAndUpdate({ blogs: id }, { $pull: { blogs: id } });
-
-  response.status(204).json(deletedBlog);
+  response.status(401).json({ error: "user not authorized" });
 });
 
 blogsRouter.put("/:id", (request, response, next) => {

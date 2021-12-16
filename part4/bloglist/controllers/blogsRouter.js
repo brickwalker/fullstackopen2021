@@ -2,16 +2,15 @@ const blogsRouter = require("express").Router();
 require("express-async-errors");
 const Blog = require("../models/Blog");
 const User = require("../models/User");
+const { extractTokenId } = require("../utils/middleware");
 
-// This section utilizes express-async-errors which automatically passes errors to next
 blogsRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({}).populate("user", { username: 1, name: 1 });
 
   response.json(blogs);
 });
 
-// This section utilizes express-async-errors which automatically passes errors to next
-blogsRouter.post("/", async (request, response) => {
+blogsRouter.post("/", extractTokenId, async (request, response) => {
   const body = request.body;
   const user = await User.findById(request.tokenId);
   const blog = new Blog({
@@ -27,8 +26,7 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
-// This section utilizes express-async-errors which automatically passes errors to next
-blogsRouter.delete("/:id", async (request, response) => {
+blogsRouter.delete("/:id", extractTokenId, async (request, response) => {
   const id = request.params.id;
   const blog = await Blog.findById(id);
 
@@ -41,12 +39,18 @@ blogsRouter.delete("/:id", async (request, response) => {
   response.status(401).json({ error: "user not authorized" });
 });
 
-blogsRouter.put("/:id", (request, response, next) => {
+blogsRouter.put("/:id", extractTokenId, async (request, response) => {
   const id = request.params.id;
+  const blog = await Blog.findById(id);
 
-  Blog.findOneAndUpdate({ _id: id }, request.body, { new: true })
-    .then((result) => response.status(200).json(result))
-    .catch((error) => next(error));
+  if (blog.user.toString() === request.tokenId) {
+    const result = await Blog.findOneAndUpdate({ _id: id }, request.body, {
+      new: true,
+    });
+    return response.status(200).json(result);
+  }
+
+  response.status(401).json({ error: "user not authorized" });
 });
 
 module.exports = blogsRouter;

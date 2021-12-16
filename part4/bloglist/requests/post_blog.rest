@@ -1,12 +1,13 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImJyaWNrd2Fsa2VyIiwiaWQiOiI2MWJiMzZhMjY3YzhhYTMxNDhlMzRmN2EiLCJpYXQiOjE2Mzk2NzM2MTh9.o5QgZ93JAFulgYXzydHLMFjM7Zdr9WHttpCSz81rEM0
 
 {
-    "title": "Karifood",
-    "author": "Olga Kari",
-    "url": "https://karifood.com/",
-    "likes": 5000,
-    "userId": "61bb36a267c8aa3148e34f7a"
+    "title": "Karifood2",
+    "author": "Olga Kari2",
+    "url": "https://karifood.com/2",
+    "likes": 5002
+
 }
 
 ###

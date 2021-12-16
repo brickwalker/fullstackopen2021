@@ -12,6 +12,10 @@ const blogSchema = new mongoose.Schema({
     unique: true,
   },
   likes: { type: Number, default: 0, max: 1000 * 1000 * 1000 },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
 });
 
 blogSchema.plugin(uniqueValidator);

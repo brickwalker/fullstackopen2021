@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const supertest = require("supertest");
 const app = require("../app");
 const Blog = require("../models/Blog");
+const User = require("../models/User");
 
 const api = supertest(app);
 
@@ -11,20 +12,27 @@ const initialBlogs = [
     author: "Olga Kari",
     url: "https://karifood.com/",
     likes: 5000,
+    user: "61bb0526663f551718e684d6",
   },
   {
     title: "Klopotenko recipes",
     author: "Eugen Klopotenko",
     url: "https://klopotenko.com/uk/",
     likes: 197000,
+    user: "61bb0526663f551718e684d6",
   },
 ];
 
 beforeEach(async () => {
   await Blog.deleteMany({});
+  await User.updateMany({}, { $set: { blogs: [] } });
   for (const blog of initialBlogs) {
     const blogObject = new Blog(blog);
-    await blogObject.save();
+    const savedBlog = await blogObject.save();
+    await User.updateOne(
+      { _id: blog.user },
+      { $push: { blogs: savedBlog._id } }
+    );
   }
 });
 
@@ -52,6 +60,7 @@ describe("add blogs", () => {
       author: "Olia",
       url: "https://tandicook.com.ua/",
       likes: 2000,
+      userId: "61bb0526663f551718e684d6",
     };
 
     await api
@@ -69,7 +78,11 @@ describe("add blogs", () => {
         const newBlogReplied = response.body.filter(
           (el) => el.url === "https://tandicook.com.ua/"
         )[0];
-        expect(newBlogReplied).toMatchObject(newBlog);
+
+        // This replaces userId property with name property of same content
+        const { userId, ...newBlogNormalized } = newBlog;
+        newBlogNormalized.user = userId;
+        expect(newBlogReplied).toMatchObject(newBlogNormalized);
       });
   });
 
@@ -78,6 +91,7 @@ describe("add blogs", () => {
       title: "Tandicook",
       author: "Olia",
       url: "https://tandicook.com.ua/",
+      userId: "61bb0526663f551718e684d6",
     };
 
     await api
@@ -90,14 +104,7 @@ describe("add blogs", () => {
       );
   });
 
-  test("should return 400 Bad Request if title and/or url properties missing", async () => {
-    // const newBlog = {
-    //   title: "Tandicook",
-    //   author: "Olia",
-    //   url: "https://tandicook.com.ua/",
-    //   likes: 2000
-    // };
-
+  test("should return 400 Bad Request if title / url / userId properties missing", async () => {
     const newBlog = {
       author: "Olia",
       likes: 2000,

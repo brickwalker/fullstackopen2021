@@ -42,6 +42,29 @@ describe("user creation", () => {
     const response = await api.get("/api/users");
     expect(response.body[0].passwordHash).toBeUndefined();
   });
+
+  test("should not add user if no password specified", async () => {
+    const newUserNoPassword = {
+      username: "bigguy",
+      name: "Solter Amonis",
+    };
+    const postResponse = await api.post("/api/users").send(newUserNoPassword).expect(400);
+    expect(postResponse.body.error).toBeDefined();
+    const getResponse = await api.get("/api/users");
+    expect(getResponse.body.length).toBe(2);
+  });
+
+  test("should not add user if password < 3 characters", async () => {
+    const newUserNoPassword = {
+      username: "bigguy",
+      name: "Solter Amonis",
+      password: "1"
+    };
+    const postResponse = await api.post("/api/users").send(newUserNoPassword).expect(400);
+    expect(postResponse.body.error).toBeDefined();
+    const getResponse = await api.get("/api/users");
+    expect(getResponse.body.length).toBe(2);
+  });
 });
 
 afterAll(() => {

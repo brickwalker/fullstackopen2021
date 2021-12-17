@@ -14,17 +14,30 @@ const App = () => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
 
+  useEffect(() => {
+    const bloglistUserString = localStorage.getItem("bloglistUser");
+    if (bloglistUserString) {
+      const user = JSON.parse(bloglistUserString);
+      setUser(user);
+    }
+  }, []);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
       const user = await loginService.login({ username, password });
       setUser(user);
-      console.log("THIS IS USER", user);
+      localStorage.setItem("bloglistUser", JSON.stringify(user));
       setUsername("");
       setPassword("");
     } catch (exception) {
       console.error("Cannot login exception: ", exception);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("bloglistUser");
+    setUser(null);
   };
 
   return (
@@ -38,7 +51,7 @@ const App = () => {
           onSubmit={handleLogin}
         />
       ) : (
-        <BlogList user={user.name} blogs={blogs} />
+        <BlogList user={user.name} blogs={blogs} handleLogout={handleLogout} />
       )}
     </div>
   );

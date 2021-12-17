@@ -1,21 +1,31 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const AddBlog = ({ setBlogs }) => {
+const AddBlog = ({ setBlogs, displayMessage }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const addedBlog = await blogService.addBlog({ title, author, url });
-    console.log("ADDEDBLOG", addedBlog);
-    if (addedBlog) {
+
+    try {
+      await blogService.addBlog({ title, author, url });
       const blogs = await blogService.getAll();
+      displayMessage({
+        type: "info",
+        text: `"${title}" is added`,
+      });
       setBlogs(blogs);
       setTitle("");
       setAuthor("");
       setUrl("");
+    } catch (error) {
+      console.error(error);
+      displayMessage({
+        type: "error",
+        text: `"${title}" cannot be added`,
+      });
     }
   };
 

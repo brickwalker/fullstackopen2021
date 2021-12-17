@@ -51,7 +51,12 @@ const App = () => {
           onSubmit={handleLogin}
         />
       ) : (
-        <BlogList user={user.name} blogs={blogs} handleLogout={handleLogout} />
+        <BlogList
+          user={user.name}
+          blogs={blogs}
+          handleLogout={handleLogout}
+          setBlogs={setBlogs}
+        />
       )}
     </div>
   );

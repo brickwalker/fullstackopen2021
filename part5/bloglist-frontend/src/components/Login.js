@@ -9,7 +9,6 @@ const Login = (props) => {
         <label>
           username{" "}
           <input
-            id="username"
             type="text"
             value={props.username}
             required
@@ -20,7 +19,6 @@ const Login = (props) => {
         <label>
           password{" "}
           <input
-            id="password"
             type="password"
             value={props.password}
             required

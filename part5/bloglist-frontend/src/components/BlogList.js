@@ -1,13 +1,16 @@
 import React from "react";
 import Blog from "./Blog";
+import AddBlog from "./AddBlog";
 
-const BlogList = ({ user, blogs, handleLogout }) => {
+const BlogList = ({ user, blogs, handleLogout, setBlogs }) => {
   return (
     <div>
       <h1>blogs</h1>
       <p>
         {user} is logged in <button onClick={handleLogout}>logout</button>
       </p>
+      <AddBlog setBlogs={setBlogs} />
+      <h2>list blogs</h2>
       {blogs.map((blog) => (
         <Blog key={blog.id} blog={blog} />
       ))}

@@ -9,7 +9,11 @@ const BlogList = ({ user, handleLogout, displayMessage }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      blogs.sort((a, b) => b.likes - a.likes);
+      console.log(blogs);
+      setBlogs(blogs);
+    });
   }, []);
 
   const toggleVisibility = () => setVisible(!visible);

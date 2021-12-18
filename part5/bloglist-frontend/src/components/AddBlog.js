@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogService from "../services/blogs";
 
-const AddBlog = ({ setBlogs, displayMessage }) => {
+const AddBlog = ({ setBlogs, displayMessage, toggleVisibility }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -12,6 +12,7 @@ const AddBlog = ({ setBlogs, displayMessage }) => {
     try {
       await blogService.addBlog({ title, author, url });
       const blogs = await blogService.getAll();
+      toggleVisibility();
       displayMessage({
         type: "info",
         text: `"${title}" is added`,

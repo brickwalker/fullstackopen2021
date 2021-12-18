@@ -27,6 +27,7 @@ ToggleForm.propTypes = {
   toggleVisibility: propTypes.func.isRequired,
   showButtonLabel: propTypes.string.isRequired,
   hideButtonLabel: propTypes.string.isRequired,
+  children: propTypes.any.isRequired,
 };
 
 export default ToggleForm;

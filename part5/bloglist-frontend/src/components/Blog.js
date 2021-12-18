@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import propTypes from "prop-types";
 import ToggleForm from "./ToggleForm";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog, setBlogs, displayMessage }) => {
+const Blog = ({ blog, displayMessage }) => {
   const [visible, setVisible] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
   const [deleted, setDeleted] = useState(false);
@@ -66,7 +67,7 @@ ${blog.title} by ${blog.author}`);
 
   if (deleted) {
     return null;
-  } 
+  }
 
   return (
     <div style={blogStyle}>
@@ -91,6 +92,11 @@ ${blog.title} by ${blog.author}`);
       </ToggleForm>
     </div>
   );
+};
+
+Blog.propTypes = {
+  blog: propTypes.object.isRequired,
+  displayMessage: propTypes.func.isRequired,
 };
 
 export default Blog;

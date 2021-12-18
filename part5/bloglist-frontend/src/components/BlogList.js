@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import propTypes from "prop-types";
 import blogService from "../services/blogs";
 import Blog from "./Blog";
 import AddBlog from "./AddBlog";
@@ -46,6 +47,12 @@ const BlogList = ({ user, handleLogout, displayMessage }) => {
       ))}
     </div>
   );
+};
+
+BlogList.propTypes = {
+  user: propTypes.string.isRequired,
+  handleLogout: propTypes.func.isRequired,
+  displayMessage: propTypes.func.isRequired,
 };
 
 export default BlogList;

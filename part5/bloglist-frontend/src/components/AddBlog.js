@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import propTypes from "prop-types";
 import blogService from "../services/blogs";
 
 const AddBlog = ({ setBlogs, displayMessage, toggleVisibility }) => {
@@ -70,5 +71,10 @@ const AddBlog = ({ setBlogs, displayMessage, toggleVisibility }) => {
   );
 };
 
-export default AddBlog;
+AddBlog.propTypes = {
+  setBlogs: propTypes.func.isRequired,
+  displayMessage: propTypes.func.isRequired,
+  toggleVisibility: propTypes.func.isRequired,
+};
 
+export default AddBlog;

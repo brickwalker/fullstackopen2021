@@ -30,6 +30,19 @@ const addBlog = async (blogObject) => {
   }
 };
 
-const exports = { getAll, addBlog };
+const updateBlog = async (id, blogObject) => {
+  const token = setToken();
+  if (token) {
+    const config = {
+      headers: { Authorization: token },
+    };
+    const response = await axios.put(`${baseUrl}/${id}`, blogObject, config);
+    return response.data;
+  } else {
+    console.error("Cannot add blog - token not available");
+  }
+};
+
+const exports = { getAll, addBlog, updateBlog };
 
 export default exports;

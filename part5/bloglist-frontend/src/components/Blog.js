@@ -1,15 +1,37 @@
 import React, { useState } from "react";
 import ToggleForm from "./ToggleForm";
+import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
-  const [visible, setVisible] = useState();
+const Blog = ({ blog, setBlogs, displayMessage }) => {
+  const [visible, setVisible] = useState(false);
+  const [likes, setLikes] = useState(blog.likes);
 
   const blogStyle = {
     borderStyle: "solid",
     borderWidth: 1,
     margin: 1,
-    padding: 1
-  }
+    padding: 1,
+  };
+
+  const addLike = async () => {
+    const id = blog.id;
+    const blogObject = {
+      title: blog.title,
+      author: blog.author,
+      user: blog.user.id,
+      likes: blog.likes + 1,
+    };
+
+    try {
+      await blogService.updateBlog(id, blogObject);
+      setLikes(likes + 1)
+    } catch (error) {
+      displayMessage({
+        type: "error",
+        text: `Cannot update blog "${blog.title}"`,
+      });
+    }
+  };
 
   return (
     <div style={blogStyle}>
@@ -21,7 +43,8 @@ const Blog = ({ blog }) => {
         toggleVisibility={() => setVisible(!visible)}
       >
         {blog.url} <br />
-        likes {blog.likes} <button>like</button><br />
+        likes {likes} <button onClick={addLike}>like</button>
+        <br />
         {blog.user.name} <br />
       </ToggleForm>
     </div>

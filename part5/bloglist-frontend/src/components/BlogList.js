@@ -34,7 +34,12 @@ const BlogList = ({ user, handleLogout, displayMessage }) => {
       </ToggleForm>
       <h2>list blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          setBlogs={setBlogs}
+          displayMessage={displayMessage}
+        />
       ))}
     </div>
   );

@@ -1,10 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import blogService from "../services/blogs";
 import Blog from "./Blog";
 import AddBlog from "./AddBlog";
 import ToggleForm from "./ToggleForm";
 
-const BlogList = ({ user, blogs, handleLogout, setBlogs, displayMessage }) => {
+const BlogList = ({ user, handleLogout, displayMessage }) => {
+  const [blogs, setBlogs] = useState([]);
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    blogService.getAll().then((blogs) => setBlogs(blogs));
+  }, []);
 
   const toggleVisibility = () => setVisible(!visible);
 
@@ -15,7 +21,8 @@ const BlogList = ({ user, blogs, handleLogout, setBlogs, displayMessage }) => {
         {user} is logged in <button onClick={handleLogout}>logout</button>
       </p>
       <ToggleForm
-        buttonLabel="create new blog"
+        showButtonLabel="create new blog"
+        hideButtonLabel="cancel"
         visible={visible}
         toggleVisibility={toggleVisibility}
       >

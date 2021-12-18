@@ -10,11 +10,11 @@ const ToggleForm = (props) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={props.toggleVisibility}>{props.buttonLabel}</button>
+        <button onClick={props.toggleVisibility}>{props.showButtonLabel}</button>
       </div>
       <div style={showWhenVisible}>
         {props.children}
-        <button onClick={props.toggleVisibility}>cancel</button>
+        <button onClick={props.toggleVisibility}>{props.hideButtonLabel}</button>
       </div>
     </div>
   );

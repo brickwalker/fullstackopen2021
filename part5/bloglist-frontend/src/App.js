@@ -1,20 +1,14 @@
 import React, { useState, useEffect } from "react";
 import BlogList from "./components/BlogList";
 import Login from "./components/Login";
-import blogService from "./services/blogs";
 import loginService from "./services/login";
 import "./App.css";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
   const [message, setMessage] = useState(null);
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
 
   useEffect(() => {
     const bloglistUserString = localStorage.getItem("bloglistUser");
@@ -74,9 +68,7 @@ const App = () => {
       ) : (
         <BlogList
           user={user.name}
-          blogs={blogs}
           handleLogout={handleLogout}
-          setBlogs={setBlogs}
           displayMessage={displayMessage}
         />
       )}

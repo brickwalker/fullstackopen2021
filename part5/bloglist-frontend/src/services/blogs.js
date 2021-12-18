@@ -12,17 +12,26 @@ const setToken = () => {
   }
 };
 
+const createConfig = () => {
+  const token = setToken();
+  if (token) {
+    const config = {
+      headers: { Authorization: token },
+    };
+    return config;
+  } else {
+    return null;
+  }
+};
+
 const getAll = () => {
   const request = axios.get(baseUrl);
   return request.then((response) => response.data);
 };
 
 const addBlog = async (blogObject) => {
-  const token = setToken();
-  if (token) {
-    const config = {
-      headers: { Authorization: token },
-    };
+  const config = createConfig();
+  if (config) {
     const response = await axios.post(baseUrl, blogObject, config);
     return response.data;
   } else {
@@ -31,18 +40,25 @@ const addBlog = async (blogObject) => {
 };
 
 const updateBlog = async (id, blogObject) => {
-  const token = setToken();
-  if (token) {
-    const config = {
-      headers: { Authorization: token },
-    };
+  const config = createConfig();
+  if (config) {
     const response = await axios.put(`${baseUrl}/${id}`, blogObject, config);
     return response.data;
   } else {
-    console.error("Cannot add blog - token not available");
+    console.error("Cannot update blog - token not available");
   }
 };
 
-const exports = { getAll, addBlog, updateBlog };
+const deleteBlog = async (id) => {
+  const config = createConfig();
+  if (config) {
+    const response = await axios.delete(`${baseUrl}/${id}`, config);
+    return response.data;
+  } else {
+    console.error("Cannot delete blog - token not available");
+  }
+}
+
+const exports = { getAll, addBlog, updateBlog, deleteBlog };
 
 export default exports;

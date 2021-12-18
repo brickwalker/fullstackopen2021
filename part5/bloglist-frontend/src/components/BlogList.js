@@ -11,7 +11,6 @@ const BlogList = ({ user, handleLogout, displayMessage }) => {
   useEffect(() => {
     blogService.getAll().then((blogs) => {
       blogs.sort((a, b) => b.likes - a.likes);
-      console.log(blogs);
       setBlogs(blogs);
     });
   }, []);

@@ -71,3 +71,4 @@ const AddBlog = ({ setBlogs, displayMessage, toggleVisibility }) => {
 };
 
 export default AddBlog;
+

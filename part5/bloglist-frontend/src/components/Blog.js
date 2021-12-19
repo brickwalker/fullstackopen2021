@@ -37,7 +37,7 @@ const Blog = ({ blog, displayMessage }) => {
 
   const isBlogOwner = () => {
     const user = JSON.parse(localStorage.getItem("bloglistUser"));
-    if (user.username === blog.user.username) {
+    if (user && user.username === blog.user.username) {
       return true;
     } else {
       return false;

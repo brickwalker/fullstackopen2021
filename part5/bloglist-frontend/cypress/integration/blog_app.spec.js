@@ -116,7 +116,7 @@ describe("Blog app", function () {
           cy.get("button:contains(view)").click({ multiple: true });
         });
 
-        it.only("should have blog with most likes on top", function () {
+        it("should have blog with most likes on top", function () {
           const likes = [];
           cy.get("div.toggleExpanded:contains(likes)").then((result) => {
             // jQuery syntax where index is first and element is second
@@ -128,9 +128,9 @@ describe("Blog app", function () {
               if (index === 0) {
                 cy.wrap(likes[index]).should("be.at.least", 0);
               } else {
-                cy.wrap(likes[index - 1] - likes[index]).should(
-                  "be.at.least",
-                  0
+                cy.wrap(likes[index]).should(
+                  "be.at.most",
+                  likes[index - 1]
                 );
               }
             }

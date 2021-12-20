@@ -12,7 +12,7 @@ const ToggleForm = (props) => {
           {props.showButtonLabel}
         </button>
       </div>
-      <div style={showWhenVisible}>
+      <div className="toggleExpanded" style={showWhenVisible}>
         {props.children}
         <button onClick={props.toggleVisibility}>
           {props.hideButtonLabel}

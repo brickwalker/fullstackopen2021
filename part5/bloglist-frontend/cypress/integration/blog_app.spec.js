@@ -1,8 +1,15 @@
-const user = {
-  username: "brickwalker",
-  name: "Artem Nedostup",
-  password: "1a2b3c4d",
-};
+const users = [
+  {
+    username: "brickwalker",
+    name: "Artem Nedostup",
+    password: "1a2b3c4d",
+  },
+  {
+    username: "alpish",
+    name: "Sasha P",
+    password: "4a3b2c1d",
+  }
+]
 
 const blogs = [
   {
@@ -20,7 +27,8 @@ const blogs = [
 describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
-    cy.request("POST", "http://localhost:3003/api/users", user);
+    cy.request("POST", "http://localhost:3003/api/users", users[0]);
+    cy.request("POST", "http://localhost:3003/api/users", users[1]);
     cy.visit("http://localhost:3000");
   });
 
@@ -33,14 +41,14 @@ describe("Blog app", function () {
 
   describe("Login", function () {
     it("should succeed with correct credentials", function () {
-      cy.contains("username").type(user.username);
-      cy.contains("password").type(user.password);
+      cy.contains("username").type(users[0].username);
+      cy.contains("password").type(users[0].password);
       cy.get("button").click();
-      cy.contains("Artem Nedostup is logged in");
+      cy.contains(`${users[0].name} is logged in`);
     });
 
     it("should fail with wrong credentials", function () {
-      cy.contains("username").type(user.username);
+      cy.contains("username").type(users[0].username);
       cy.contains("password").type("wrongPassword");
       cy.get("button").click();
       cy.get(".error")
@@ -52,8 +60,8 @@ describe("Blog app", function () {
   describe("When logged in", function () {
     beforeEach(function () {
       cy.request("POST", "http://localhost:3003/api/login", {
-        username: user.username,
-        password: user.password,
+        username: users[0].username,
+        password: users[0].password,
       }).then((response) => {
         localStorage.setItem("bloglistUser", JSON.stringify(response.body));
         cy.visit("http://localhost:3000");
@@ -85,14 +93,34 @@ describe("Blog app", function () {
           auth: { bearer: userObject.token },
           body: blogs[1],
         });
-        cy.reload()
+        cy.reload();
       });
 
-      it.only("should be able to like blog", function() {
-        cy.contains(blogs[0].title).contains("view").click()
-        cy.contains(blogs[0].title).contains("like").click()
+      it("should be able to like blog", function () {
+        cy.contains(blogs[0].title).contains("view").click();
+        cy.contains(blogs[0].title).contains("like").click();
         cy.contains("likes 1");
-      })
+      });
+      it("should be able to delete own blog", function () {
+        cy.contains(blogs[0].title).contains("view").click();
+        cy.contains(blogs[0].title).contains("delete").click();
+        cy.get("body").should("not.contain", blogs[0].title);
+      });
+
+      describe("When different user logged in", function () {
+        beforeEach(function () {
+          cy.contains("logout").click();
+          cy.contains("username").type(users[1].username);
+          cy.contains("password").type(users[1].password);
+          cy.get("button").click();
+          cy.contains(`${users[1].name} is logged in`);
+        });
+        it("should not be able to delete blog added by other user", function () {
+          cy.contains(blogs[0].title).contains("view").click();
+          cy.contains(blogs[1].title).contains("view").click();
+          cy.get("body").should("not.contain", "delete");
+        });
+      });
     });
   });
 });

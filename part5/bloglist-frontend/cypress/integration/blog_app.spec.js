@@ -4,11 +4,18 @@ const user = {
   password: "1a2b3c4d",
 };
 
-const blog = {
-  title: "Most amusing blog",
-  author: "Creative Person",
-  url: "https://mostamusingblog.com"
-}
+const blogs = [
+  {
+    title: "Most amusing blog",
+    author: "Creative Person",
+    url: "https://mostamusingblog.com",
+  },
+  {
+    title: "Tie your laces",
+    author: "Lace Guru",
+    url: "https://lace.com",
+  },
+];
 
 describe("Blog app", function () {
   beforeEach(function () {
@@ -54,12 +61,38 @@ describe("Blog app", function () {
     });
 
     it("should create blog", function () {
-      cy.contains("create new blog").click()
-      cy.contains("title").type(blog.title)
-      cy.contains("author").type(blog.author)
-      cy.contains("url").type(blog.url)
-      cy.contains("add").click()
-      cy.contains(`${blog.title} - ${blog.author}`)
-    })
+      cy.contains("create new blog").click();
+      cy.contains("title").type(blogs[0].title);
+      cy.contains("author").type(blogs[0].author);
+      cy.contains("url").type(blogs[0].url);
+      cy.contains("add").click();
+      cy.contains(`${blogs[0].title} - ${blogs[0].author}`);
+    });
+
+    describe("When blogs created", function () {
+      beforeEach(function () {
+        const userString = localStorage.getItem("bloglistUser");
+        const userObject = JSON.parse(userString);
+        cy.request({
+          url: "http://localhost:3003/api/blogs",
+          method: "POST",
+          auth: { bearer: userObject.token },
+          body: blogs[0],
+        });
+        cy.request({
+          url: "http://localhost:3003/api/blogs",
+          method: "POST",
+          auth: { bearer: userObject.token },
+          body: blogs[1],
+        });
+        cy.reload()
+      });
+
+      it.only("should be able to like blog", function() {
+        cy.contains(blogs[0].title).contains("view").click()
+        cy.contains(blogs[0].title).contains("like").click()
+        cy.contains("likes 1");
+      })
+    });
   });
 });

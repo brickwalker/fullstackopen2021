@@ -1,4 +1,5 @@
-.info, .error {
+.info,
+.error {
   padding: 1em;
   border-radius: 0.2em;
   font-weight: bold;
@@ -6,7 +7,7 @@
 
 .error {
   background-color: lightgray;
-  color: darkred;
+  color: rgb(139, 0, 0);
 }
 
 .info {

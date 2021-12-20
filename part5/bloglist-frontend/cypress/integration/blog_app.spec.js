@@ -4,6 +4,12 @@ const user = {
   password: "1a2b3c4d",
 };
 
+const blog = {
+  title: "Most amusing blog",
+  author: "Creative Person",
+  url: "https://mostamusingblog.com"
+}
+
 describe("Blog app", function () {
   beforeEach(function () {
     cy.request("POST", "http://localhost:3003/api/testing/reset");
@@ -34,5 +40,26 @@ describe("Blog app", function () {
         .should("contain", "Login unsuccessful")
         .and("have.css", "color", "rgb(139, 0, 0)");
     });
+  });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.request("POST", "http://localhost:3003/api/login", {
+        username: user.username,
+        password: user.password,
+      }).then((response) => {
+        localStorage.setItem("bloglistUser", JSON.stringify(response.body));
+        cy.visit("http://localhost:3000");
+      });
+    });
+
+    it("should create blog", function () {
+      cy.contains("create new blog").click()
+      cy.contains("title").type(blog.title)
+      cy.contains("author").type(blog.author)
+      cy.contains("url").type(blog.url)
+      cy.contains("add").click()
+      cy.contains(`${blog.title} - ${blog.author}`)
+    })
   });
 });

@@ -3,9 +3,16 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
+    node: true,
     "jest/globals": true,
+    "cypress/globals": true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  extends: [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:cypress/recommended",
+    "prettier",
+  ],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -13,7 +20,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: "module",
   },
-  plugins: ["react", "jest"],
+  plugins: ["react", "jest", "cypress"],
   rules: {
     eqeqeq: "error",
     "no-trailing-spaces": "error",

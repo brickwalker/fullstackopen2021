@@ -20,9 +20,6 @@ const asObject = (anecdote) => {
 const initialState = anecdotesAtStart.map(asObject);
 
 const reducer = (state = initialState, action) => {
-  console.log("state now: ", state);
-  console.log("action", action);
-
   switch (action.type) {
     case "LIKE": {
       const anecdote = state.find((anecdote) => anecdote.id === action.data.id);
@@ -49,7 +46,6 @@ export const likeAnecdote = (id) => {
     data: { id },
   };
 };
-
 
 // ADD action
 export const addAnecdote = (text) => {

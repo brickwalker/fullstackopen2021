@@ -17,7 +17,7 @@ const AnecdoteList = () => {
   );
 
   const vote = (anecdote) => {
-    dispatch(likeAnecdote(anecdote.id));
+    dispatch(likeAnecdote(anecdote));
     dispatch(displayMessage(`You voted '${anecdote.content}'`));
     setTimeout(() => dispatch(hideMessage()), 5000);
   };

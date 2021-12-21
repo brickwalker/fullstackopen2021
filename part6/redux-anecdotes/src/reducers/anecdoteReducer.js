@@ -29,10 +29,13 @@ export const likeAnecdote = (id) => {
   };
 };
 
-export const addAnecdote = (object) => {
-  return {
-    type: "ADD",
-    data: object,
+export const addAnecdote = (anecdoteText) => {
+  return async (dispatch) => {
+    const anecdoteObject = await anecdoteService.postOne(anecdoteText);
+    dispatch({
+      type: "ADD",
+      data: anecdoteObject,
+    });
   };
 };
 

@@ -9,17 +9,20 @@ const reducer = (state = null, action) => {
   }
 };
 
-export const displayMessage = (message) => {
-  return {
-    type: "NOTIFY",
-    data: { message },
-  };
-};
-
-export const hideMessage = () => {
-  return {
-    type: "HIDE",
-    data: { message: null },
+export const displayMessage = (message, timeMs) => {
+  return async (dispatch) => {
+    dispatch({
+      type: "NOTIFY",
+      data: { message },
+    });
+    setTimeout(
+      () =>
+        dispatch({
+          type: "HIDE",
+          data: { message: null },
+        }),
+      timeMs
+    );
   };
 };
 

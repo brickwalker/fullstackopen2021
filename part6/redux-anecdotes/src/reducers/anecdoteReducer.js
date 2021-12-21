@@ -42,6 +42,7 @@ const reducer = (state = initialState, action) => {
   }
 };
 
+// LIKE action
 export const likeAnecdote = (id) => {
   return {
     type: "LIKE",
@@ -49,6 +50,8 @@ export const likeAnecdote = (id) => {
   };
 };
 
+
+// ADD action
 export const addAnecdote = (text) => {
   return {
     type: "ADD",

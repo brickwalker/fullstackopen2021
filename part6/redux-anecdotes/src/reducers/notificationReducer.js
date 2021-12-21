@@ -1,13 +1,11 @@
-const initialState = null;
-
-const reducer = (state = initialState, action) => {
+const reducer = (state = null, action) => {
   switch (action.type) {
     case "NOTIFY":
       return action.data.message;
     case "HIDE":
       return null;
     default:
-      return initialState;
+      return state;
   }
 };
 

@@ -6,21 +6,21 @@ import reducer from "./reducer";
 const store = createStore(reducer);
 
 const App = () => {
-  const good = () => {
+  const dispatchAction = (event) => {
     store.dispatch({
-      type: "GOOD",
+      type: event.target.id.toUpperCase(),
     });
   };
 
   return (
     <div>
-      <button onClick={good}>good</button>
-      <button>ok</button>
-      <button>bad</button>
-      <button>reset stats</button>
+      <button id="GOOD" onClick={dispatchAction}>good</button>
+      <button id="OK"  onClick={dispatchAction}>ok</button>
+      <button id="BAD"  onClick={dispatchAction}>bad</button>
+      <button id="ZERO" onClick={dispatchAction}>reset stats</button>
       <div>good {store.getState().good}</div>
-      <div>ok</div>
-      <div>bad</div>
+      <div>ok {store.getState().ok}</div>
+      <div>bad {store.getState().bad}</div>
     </div>
   );
 };

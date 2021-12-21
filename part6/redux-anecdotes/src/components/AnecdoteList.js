@@ -2,13 +2,12 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { likeAnecdote, loadAnecdotes } from "../reducers/anecdoteReducer";
 import { displayMessage, hideMessage } from "../reducers/notificationReducer";
-import anecdoteService from "../services/anecdote";
 
 const AnecdoteList = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    anecdoteService.getAll().then((data) => dispatch(loadAnecdotes(data)));
+    dispatch(loadAnecdotes());
   }, [dispatch]);
 
   const anecdotes = useSelector((state) =>

@@ -1,3 +1,5 @@
+import anecdoteService from "../services/anecdote";
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case "LIKE": {
@@ -34,10 +36,13 @@ export const addAnecdote = (object) => {
   };
 };
 
-export const loadAnecdotes = (data) => {
-  return {
-    type: "LOAD_AC",
-    data,
+export const loadAnecdotes = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdoteService.getAll();
+    dispatch({
+      type: "LOAD_AC",
+      data: anecdotes,
+    });
   };
 };
 

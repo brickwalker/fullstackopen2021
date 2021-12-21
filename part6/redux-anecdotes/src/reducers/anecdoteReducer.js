@@ -32,7 +32,10 @@ const reducer = (state = initialState, action) => {
       );
       return newState;
     }
-
+    case "ADD": {
+      const newState = [...state, action.data];
+      return newState;
+    }
     default:
       return state;
   }
@@ -42,6 +45,13 @@ export const likeAnecdote = (id) => {
   return {
     type: "LIKE",
     data: { id },
+  };
+};
+
+export const addAnecdote = (text) => {
+  return {
+    type: "ADD",
+    data: asObject(text),
   };
 };
 

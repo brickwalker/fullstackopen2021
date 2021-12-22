@@ -9,13 +9,16 @@ const reducer = (state = null, action) => {
   }
 };
 
+let timeoutId;
+
 export const displayMessage = (message, timeMs) => {
   return async (dispatch) => {
     dispatch({
       type: "NOTIFY",
       data: { message },
     });
-    setTimeout(
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(
       () =>
         dispatch({
           type: "HIDE",

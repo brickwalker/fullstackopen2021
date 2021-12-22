@@ -12,7 +12,7 @@ const AnecdoteList = () => {
 
   const anecdotes = useSelector((state) =>
     state.anecdotes.filter((anecdote) =>
-      anecdote.content.includes(state.filter)
+      anecdote.content.toLowerCase().includes(state.filter.toLowerCase())
     )
   );
 

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Switch, Route, Link, useRouteMatch } from "react-router-dom";
+import {
+  Switch,
+  Route,
+  Link,
+  useRouteMatch,
+  useHistory,
+} from "react-router-dom";
 
 const Menu = () => {
   const padding = {
@@ -13,18 +19,26 @@ const Menu = () => {
   );
 };
 
-const AnecdoteList = ({ anecdotes }) => (
-  <div>
-    <h2>Anecdotes</h2>
-    <ul>
-      {anecdotes.map((anecdote) => (
-        <li key={anecdote.id}>
-          <a href={`/anecdotes/${anecdote.id}`}>{anecdote.content}</a>
-        </li>
-      ))}
-    </ul>
-  </div>
-);
+const AnecdoteList = ({ anecdotes }) => {
+  const history = useHistory();
+
+  return (
+    <div>
+      <h2>Anecdotes</h2>
+      <ul>
+        {anecdotes.map((anecdote) => (
+          <li
+            key={anecdote.id}
+            onClick={() => history.push(`/anecdotes/${anecdote.id}`)}
+            style={{ textDecoration: "underline" }}
+          >
+            {anecdote.content}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
 
 const About = () => (
   <div>
@@ -67,6 +81,8 @@ const CreateNew = (props) => {
   const [author, setAuthor] = useState("");
   const [info, setInfo] = useState("");
 
+  const history = useHistory();
+
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
@@ -75,6 +91,7 @@ const CreateNew = (props) => {
       info,
       votes: 0,
     });
+    history.push("/");
   };
 
   return (
@@ -134,6 +151,8 @@ const App = () => {
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0);
     setAnecdotes(anecdotes.concat(anecdote));
+    setNotification(`New anecdote created '${anecdote.content}'`);
+    setTimeout(() => setNotification(""), 10 * 1000);
   };
 
   const anecdoteById = (id) => anecdotes.find((a) => a.id === id);
@@ -156,6 +175,7 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification && <Notification type="info" message={notification} />}
       <Switch>
         <Route path="/anecdotes/:id">
           <Anecdote item={anecdote} />
@@ -176,15 +196,34 @@ const App = () => {
 };
 
 const Anecdote = ({ item }) => {
-  return (
-    <div>
-      {Object.keys(item).map((el) => (
-        <p key={el}>
-          <strong>{el}</strong> {item[el]}
-        </p>
-      ))}
-    </div>
-  );
+  if (item) {
+    return (
+      <div>
+        {Object.keys(item).map((el) => (
+          <p key={el}>
+            <strong>{el}</strong> {item[el]}
+          </p>
+        ))}
+      </div>
+    );
+  } else {
+    return null;
+  }
+};
+
+const Notification = ({ message, type }) => {
+  let styles;
+  if (type === "error") {
+    styles = {
+      color: "darkred",
+    };
+  } else {
+    styles = {
+      color: "darkgreen",
+    };
+  }
+
+  return <div style={styles}>{message}</div>;
 };
 
 export default App;

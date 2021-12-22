@@ -9,9 +9,6 @@ import {
 import { useField } from "./hooks";
 
 const Menu = () => {
-  const padding = {
-    paddingRight: 5,
-  };
   return (
     <div>
       <Link to="/">anecdotes</Link> <Link to="/create">create new</Link>{" "}

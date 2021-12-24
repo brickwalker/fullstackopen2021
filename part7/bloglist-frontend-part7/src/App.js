@@ -9,6 +9,7 @@ import { initUser, loginUser } from "./reducers/loginReducer";
 import "./App.css";
 import BlogIndex from "./components/BlogIndex";
 import Users from "./components/Users";
+import UserBlogs from "./components/UserBlogs";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -63,6 +64,7 @@ const App = () => {
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/users" element={<Users />} />
+            <Route path="/users/:id" element={<UserBlogs />} />
           </Routes>
         </div>
       )}

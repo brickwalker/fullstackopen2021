@@ -3,36 +3,30 @@ import { useSelector, useDispatch } from "react-redux";
 import BlogList from "./components/BlogList";
 import Login from "./components/Login";
 import DisplayMessage from "./components/DisplayMessage";
-import loginService from "./services/login";
 import { showNotification } from "./reducers/messageReducer";
+import { initUser, loginUser, logoutUser } from "./reducers/loginReducer";
 import "./App.css";
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const bloglistUserString = localStorage.getItem("bloglistUser");
-    if (bloglistUserString) {
-      const user = JSON.parse(bloglistUserString);
-      setUser(user);
-    }
-  }, []);
 
   const message = useSelector((state) => state.message);
+  const user = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
-  const handleLogin = async (event) => {
+  useEffect(() => {
+    dispatch(initUser());
+  }, []);
+
+  const handleLogin = (event) => {
     event.preventDefault();
     try {
-      const user = await loginService.login({ username, password });
-      setUser(user);
-      localStorage.setItem("bloglistUser", JSON.stringify(user));
+      dispatch(loginUser(username, password));
       dispatch(
         showNotification({
           type: "info",
-          text: `Welcome ${user.name}`,
+          text: `Welcome ${username}`,
         })
       );
       setUsername("");
@@ -49,14 +43,13 @@ const App = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("bloglistUser");
+    dispatch(logoutUser());
     dispatch(
       showNotification({
         type: "info",
         text: `Goodbye ${user.name}`,
       })
     );
-    setUser(null);
   };
 
   return (

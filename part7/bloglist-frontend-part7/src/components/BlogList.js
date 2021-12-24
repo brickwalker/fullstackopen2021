@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Blog from "./Blog";
+import BlogItem from "./BlogItem";
 import AddBlog from "./AddBlog";
 import ToggleForm from "./ToggleForm";
 import { initializeBlogs } from "../reducers/blogReducer";
@@ -29,7 +29,7 @@ const BlogList = () => {
       </ToggleForm>
       <h2>list blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} />
+        <BlogItem key={blog.id} blog={blog} />
       ))}
     </div>
   );

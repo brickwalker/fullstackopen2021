@@ -10,6 +10,7 @@ import "./App.css";
 import BlogIndex from "./components/BlogIndex";
 import Users from "./components/Users";
 import UserBlogs from "./components/UserBlogs";
+import BlogView from "./components/BlogView";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -65,6 +66,7 @@ const App = () => {
             <Route path="/" element={<BlogList />} />
             <Route path="/users" element={<Users />} />
             <Route path="/users/:id" element={<UserBlogs />} />
+            <Route path="/blogs/:id" element={<BlogView />} />
           </Routes>
         </div>
       )}

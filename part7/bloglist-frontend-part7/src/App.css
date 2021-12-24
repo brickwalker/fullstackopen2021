@@ -1,0 +1,16 @@
+.info,
+.error {
+  padding: 1em;
+  border-radius: 0.2em;
+  font-weight: bold;
+}
+
+.error {
+  background-color: lightgray;
+  color: rgb(139, 0, 0);
+}
+
+.info {
+  background-color: lightseagreen;
+  color: white;
+}

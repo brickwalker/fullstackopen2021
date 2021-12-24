@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Routes, Route } from "react-router-dom";
 import BlogList from "./components/BlogList";
 import Login from "./components/Login";
 import DisplayMessage from "./components/DisplayMessage";
 import { showNotification } from "./reducers/messageReducer";
-import { initUser, loginUser, logoutUser } from "./reducers/loginReducer";
+import { initUser, loginUser } from "./reducers/loginReducer";
 import "./App.css";
+import BlogIndex from "./components/BlogIndex";
+import Users from "./components/Users";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -42,16 +45,6 @@ const App = () => {
     }
   };
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    dispatch(
-      showNotification({
-        type: "info",
-        text: `Goodbye ${user.name}`,
-      })
-    );
-  };
-
   return (
     <div>
       {message !== null && <DisplayMessage message={message} />}
@@ -65,7 +58,13 @@ const App = () => {
           onSubmit={handleLogin}
         />
       ) : (
-        <BlogList user={user.name} handleLogout={handleLogout} />
+        <div>
+          <BlogIndex />
+          <Routes>
+            <Route path="/" element={<BlogList />} />
+            <Route path="/users" element={<Users />} />
+          </Routes>
+        </div>
       )}
     </div>
   );

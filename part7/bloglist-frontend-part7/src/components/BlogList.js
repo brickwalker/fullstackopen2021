@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import propTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import Blog from "./Blog";
 import AddBlog from "./AddBlog";
 import ToggleForm from "./ToggleForm";
 import { initializeBlogs } from "../reducers/blogReducer";
 
-const BlogList = ({ user, handleLogout }) => {
+const BlogList = () => {
   const [visible, setVisible] = useState(false);
 
   const blogs = useSelector((state) => state.blogs);
@@ -20,10 +19,6 @@ const BlogList = ({ user, handleLogout }) => {
 
   return (
     <div>
-      <h1>blogs</h1>
-      <p>
-        {user} is logged in <button onClick={handleLogout}>logout</button>
-      </p>
       <ToggleForm
         showButtonLabel="create new blog"
         hideButtonLabel="cancel"
@@ -38,11 +33,6 @@ const BlogList = ({ user, handleLogout }) => {
       ))}
     </div>
   );
-};
-
-BlogList.propTypes = {
-  user: propTypes.string.isRequired,
-  handleLogout: propTypes.func.isRequired,
 };
 
 export default BlogList;

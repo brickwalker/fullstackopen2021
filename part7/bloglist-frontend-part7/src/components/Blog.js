@@ -3,12 +3,11 @@ import propTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../reducers/messageReducer";
 import ToggleForm from "./ToggleForm";
-import blogService from "../services/blogs";
+import { addLike } from "../reducers/blogReducer";
+import { deleteBlog } from "../reducers/blogReducer";
 
 const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
-  const [deleted, setDeleted] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -19,18 +18,9 @@ const Blog = ({ blog }) => {
     padding: 5,
   };
 
-  const addLike = async () => {
-    const id = blog.id;
-    const blogObject = {
-      title: blog.title,
-      author: blog.author,
-      user: blog.user.id,
-      likes: blog.likes + 1,
-    };
-
+  const handleLike = () => {
     try {
-      await blogService.updateBlog(id, blogObject);
-      setLikes(likes + 1);
+      dispatch(addLike(blog));
     } catch (error) {
       dispatch(
         showNotification({
@@ -50,14 +40,12 @@ const Blog = ({ blog }) => {
     }
   };
 
-  const deleteBlog = async () => {
+  const handleDelete = async () => {
     const remove = window.confirm(`Are you sure you want to remove this blog?
 ${blog.title} by ${blog.author}`);
-    const id = blog.id;
     if (remove) {
       try {
-        await blogService.deleteBlog(id);
-        setDeleted(true);
+        dispatch(deleteBlog(blog.id));
         dispatch(
           showNotification({
             type: "info",
@@ -75,10 +63,6 @@ ${blog.title} by ${blog.author}`);
     }
   };
 
-  if (deleted) {
-    return null;
-  }
-
   return (
     <div style={blogStyle}>
       {blog.title} - {blog.author}
@@ -90,13 +74,16 @@ ${blog.title} by ${blog.author}`);
       >
         {isBlogOwner() && (
           <div>
-            <button style={{ backgroundColor: "orange" }} onClick={deleteBlog}>
+            <button
+              style={{ backgroundColor: "orange" }}
+              onClick={handleDelete}
+            >
               delete
             </button>
           </div>
         )}
         {blog.url} <br />
-        likes {likes} <button onClick={addLike}>like</button>
+        likes {blog.likes} <button onClick={handleLike}>like</button>
         <br />
         {blog.user.name} <br />
       </ToggleForm>

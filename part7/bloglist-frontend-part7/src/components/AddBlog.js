@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import propTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../reducers/messageReducer";
-import blogService from "../services/blogs";
+import { addBlog } from "../reducers/blogReducer";
 
-const AddBlog = ({ setBlogs, toggleVisibility }) => {
+const AddBlog = ({ toggleVisibility }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -15,16 +15,14 @@ const AddBlog = ({ setBlogs, toggleVisibility }) => {
     event.preventDefault();
 
     try {
-      await blogService.addBlog({ title, author, url });
-      const blogs = await blogService.getAll();
-      toggleVisibility();
+      dispatch(addBlog(title, author, url));
       dispatch(
         showNotification({
           type: "info",
           text: `"${title}" is added`,
         })
       );
-      setBlogs(blogs);
+      toggleVisibility();
       setTitle("");
       setAuthor("");
       setUrl("");
@@ -80,7 +78,6 @@ const AddBlog = ({ setBlogs, toggleVisibility }) => {
 };
 
 AddBlog.propTypes = {
-  setBlogs: propTypes.func.isRequired,
   toggleVisibility: propTypes.func.isRequired,
 };
 

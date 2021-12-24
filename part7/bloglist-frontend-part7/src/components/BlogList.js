@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from "react";
 import propTypes from "prop-types";
-import blogService from "../services/blogs";
+import { useSelector, useDispatch } from "react-redux";
 import Blog from "./Blog";
 import AddBlog from "./AddBlog";
 import ToggleForm from "./ToggleForm";
+import { initializeBlogs } from "../reducers/blogReducer";
 
 const BlogList = ({ user, handleLogout }) => {
-  const [blogs, setBlogs] = useState([]);
   const [visible, setVisible] = useState(false);
 
+  const blogs = useSelector((state) => state.blogs);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    blogService.getAll().then((blogs) => {
-      blogs.sort((a, b) => b.likes - a.likes);
-      setBlogs(blogs);
-    });
+    dispatch(initializeBlogs());
   }, []);
 
   const toggleVisibility = () => setVisible(!visible);
@@ -30,11 +30,11 @@ const BlogList = ({ user, handleLogout }) => {
         visible={visible}
         toggleVisibility={toggleVisibility}
       >
-        <AddBlog setBlogs={setBlogs} toggleVisibility={toggleVisibility} />
+        <AddBlog toggleVisibility={toggleVisibility} />
       </ToggleForm>
       <h2>list blogs</h2>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} setBlogs={setBlogs} />
+        <Blog key={blog.id} blog={blog} />
       ))}
     </div>
   );

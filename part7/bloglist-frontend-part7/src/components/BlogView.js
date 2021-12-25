@@ -73,6 +73,14 @@ ${blog.title} by ${blog.author}`);
           <strong>added by</strong> {blog.user.name}
         </p>
         <button onClick={handleDelete}>delete</button>
+        <h3>comments</h3>
+        <ul>
+          {blog.comments.length > 0 ? (
+            blog.comments.map((el) => <li key={el}>{el}</li>)
+          ) : (
+            <p>No comments</p>
+          )}
+        </ul>
       </div>
     );
   }

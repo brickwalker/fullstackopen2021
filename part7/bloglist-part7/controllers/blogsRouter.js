@@ -26,6 +26,20 @@ blogsRouter.post("/", extractTokenId, async (request, response) => {
   response.status(201).json(savedBlog);
 });
 
+blogsRouter.post("/:id/comments", extractTokenId, async (request, response) => {
+  const id = request.params.id;
+  console.log("ID", id);
+  console.log("BODY", request.body);
+  const result = await Blog.findOneAndUpdate(
+    { _id: id },
+    { $push: { comments: request.body.comment } },
+    {
+      new: true,
+    }
+  );
+  return response.status(200).json(result);
+});
+
 blogsRouter.delete("/:id", extractTokenId, async (request, response) => {
   const id = request.params.id;
   const blog = await Blog.findById(id);

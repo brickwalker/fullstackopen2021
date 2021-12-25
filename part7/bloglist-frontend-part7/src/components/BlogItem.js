@@ -1,21 +1,21 @@
 import React from "react";
 import propTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import styled from "styled-components";
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: black;
+`
 
 const BlogItem = ({ blog }) => {
-  const blogStyle = {
-    borderStyle: "solid",
-    borderWidth: 1,
-    margin: 5,
-    padding: 5,
-  };
-
   return (
-    <div style={blogStyle}>
-      <Link to={`/blogs/${blog.id}`}>
-        {blog.title} - {blog.author}
-      </Link>
-    </div>
+    <Box mt={1}>
+      <StyledLink to={`/blogs/${blog.id}`}>
+        <Typography color="primary">{blog.title} - {blog.author}</Typography>
+      </StyledLink>
+    </Box>
   );
 };
 

@@ -1,5 +1,6 @@
 import React from "react";
 import propTypes from "prop-types";
+import { Button } from "@mui/material";
 
 const ToggleForm = (props) => {
   const hideWhenVisible = { display: props.visible ? "none" : "" };
@@ -8,15 +9,15 @@ const ToggleForm = (props) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={props.toggleVisibility}>
+        <Button onClick={props.toggleVisibility}>
           {props.showButtonLabel}
-        </button>
+        </Button>
       </div>
       <div className="toggleExpanded" style={showWhenVisible}>
         {props.children}
-        <button onClick={props.toggleVisibility}>
+        <Button onClick={props.toggleVisibility}>
           {props.hideButtonLabel}
-        </button>
+        </Button>
       </div>
     </div>
   );

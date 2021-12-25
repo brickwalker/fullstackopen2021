@@ -19,6 +19,7 @@ const BlogList = () => {
 
   return (
     <div>
+      <h2>Blog app</h2>
       <ToggleForm
         showButtonLabel="create new blog"
         hideButtonLabel="cancel"

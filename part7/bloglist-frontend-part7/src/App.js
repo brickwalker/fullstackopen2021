@@ -7,7 +7,7 @@ import DisplayMessage from "./components/DisplayMessage";
 import { showNotification } from "./reducers/messageReducer";
 import { initUser, loginUser } from "./reducers/loginReducer";
 import "./App.css";
-import BlogIndex from "./components/BlogIndex";
+import NavMenu from "./components/NavMenu";
 import Users from "./components/Users";
 import UserBlogs from "./components/UserBlogs";
 import BlogView from "./components/BlogView";
@@ -61,7 +61,7 @@ const App = () => {
         />
       ) : (
         <div>
-          <BlogIndex />
+          <NavMenu />
           <Routes>
             <Route path="/" element={<BlogList />} />
             <Route path="/users" element={<Users />} />

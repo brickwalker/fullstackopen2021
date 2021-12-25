@@ -1,9 +1,10 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from "react-router-dom";
 import { logoutUser } from "../reducers/loginReducer";
 import { showNotification } from "../reducers/messageReducer";
 
-const BlogIndex = () => {
+const NavMenu = () => {
   const user = useSelector((state) => state.login);
   const dispatch = useDispatch();
 
@@ -19,12 +20,13 @@ const BlogIndex = () => {
 
   return (
     <div>
-      <h1>blogs</h1>
-      <p>
+      <Link to="/">blogs</Link> {" "}
+      <Link to="/users">users</Link> {" "}
+      <span>
         {user.name} is logged in <button onClick={handleLogout}>logout</button>
-      </p>
+      </span>
     </div>
   );
 };
 
-export default BlogIndex;
+export default NavMenu;

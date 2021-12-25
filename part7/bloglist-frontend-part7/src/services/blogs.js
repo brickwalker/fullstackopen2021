@@ -39,6 +39,20 @@ const addBlog = async (blogObject) => {
   }
 };
 
+const addComment = async (blogId, commentText) => {
+  const config = createConfig();
+  if (config) {
+    const response = await axios.post(
+      `${baseUrl}/${blogId}/comments`,
+      { comment: commentText },
+      config
+    );
+    return response.data;
+  } else {
+    console.error("Cannot add comment - token not available");
+  }
+};
+
 const updateBlog = async (id, blogObject) => {
   const config = createConfig();
   if (config) {
@@ -57,8 +71,8 @@ const deleteBlog = async (id) => {
   } else {
     console.error("Cannot delete blog - token not available");
   }
-}
+};
 
-const exports = { getAll, addBlog, updateBlog, deleteBlog };
+const exports = { getAll, addBlog, updateBlog, deleteBlog, addComment };
 
 export default exports;

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { initializeBlogs } from "../reducers/blogReducer";
-import { addLike, deleteBlog } from "../reducers/blogReducer";
+import { addLike, deleteBlog, addComment } from "../reducers/blogReducer";
 import { showNotification } from "../reducers/messageReducer";
 
 const BlogView = () => {
@@ -56,6 +56,13 @@ ${blog.title} by ${blog.author}`);
     }
   };
 
+  const handleComment = (event) => {
+    event.preventDefault();
+    const comment = document.getElementById("commentField").value;
+    dispatch(addComment(blog.id, comment));
+    document.getElementById("commentField").value = "";
+  };
+
   if (blog) {
     return (
       <div>
@@ -74,6 +81,10 @@ ${blog.title} by ${blog.author}`);
         </p>
         <button onClick={handleDelete}>delete</button>
         <h3>comments</h3>
+        <form onSubmit={handleComment}>
+          <input id="commentField" required />
+          <button type="submit">add comment</button>
+        </form>
         <ul>
           {blog.comments.length > 0 ? (
             blog.comments.map((el) => <li key={el}>{el}</li>)

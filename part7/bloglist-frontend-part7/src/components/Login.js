@@ -1,34 +1,31 @@
 import React from "react";
 import propTypes from "prop-types";
+import { Box, TextField, Typography, Button } from "@mui/material";
 
 const Login = (props) => {
   return (
-    <div>
-      <h1>login</h1>
-      <form onSubmit={props.onSubmit}>
-        <label>
-          username{" "}
-          <input
-            type="text"
-            value={props.username}
-            required
-            onChange={({ target }) => props.setUsername(target.value)}
-          />
-        </label>
+    <Box component="div" m={5}>
+      <Typography variant="h2">login</Typography>
+      <Box component="form" onSubmit={props.onSubmit}>
+        <TextField
+          label="Username"
+          type="text"
+          value={props.username}
+          required
+          onChange={({ target }) => props.setUsername(target.value)}
+        />
         <br />
-        <label>
-          password{" "}
-          <input
-            type="password"
-            value={props.password}
-            required
-            onChange={({ target }) => props.setPassword(target.value)}
-          />
-        </label>
+        <TextField
+          label="Password"
+          type="password"
+          value={props.password}
+          required
+          onChange={({ target }) => props.setPassword(target.value)}
+        />
         <br />
-        <button type="submit">login</button>
-      </form>
-    </div>
+        <Button type="submit" variant="outlined">login</Button>
+      </Box>
+    </Box>
   );
 };
 

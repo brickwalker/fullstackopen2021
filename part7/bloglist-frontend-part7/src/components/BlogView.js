@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { initializeBlogs } from "../reducers/blogReducer";
 import { addLike, deleteBlog, addComment } from "../reducers/blogReducer";
 import { showNotification } from "../reducers/messageReducer";
+import { Typography, Box, Button, Input, List, ListItem } from "@mui/material";
 
 const BlogView = () => {
   const { id } = useParams();
@@ -65,34 +66,36 @@ ${blog.title} by ${blog.author}`);
 
   if (blog) {
     return (
-      <div>
-        <h2>
+      <Box m={5}>
+        <Typography variant="h3" mb={2}>
           {blog.title} - {blog.author}
-        </h2>
-        <p>
+        </Typography>
+        <Typography>
           <strong>url</strong> {blog.url}
-        </p>
-        <p>
+        </Typography>
+        <Typography>
           <strong>likes</strong> {blog.likes}{" "}
-          <button onClick={handleLike}>like</button>
-        </p>
-        <p>
+          <Button onClick={handleLike}>like</Button>
+        </Typography>
+        <Typography>
           <strong>added by</strong> {blog.user.name}
-        </p>
-        <button onClick={handleDelete}>delete</button>
-        <h3>comments</h3>
+        </Typography>
+        <Button variant="contained" onClick={handleDelete}>
+          delete
+        </Button>
+        <Typography variant="h4" mt={3}>Comments</Typography>
         <form onSubmit={handleComment}>
-          <input id="commentField" required />
-          <button type="submit">add comment</button>
+          <Input id="commentField" required />
+          <Button type="submit">add comment</Button>
         </form>
-        <ul>
+        <List>
           {blog.comments.length > 0 ? (
-            blog.comments.map((el) => <li key={el}>{el}</li>)
+            blog.comments.map((el) => <ListItem key={el}><Typography>{el}</Typography></ListItem>)
           ) : (
             <p>No comments</p>
           )}
-        </ul>
-      </div>
+        </List>
+      </Box>
     );
   }
   return null;

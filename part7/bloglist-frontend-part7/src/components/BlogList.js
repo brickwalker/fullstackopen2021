@@ -4,6 +4,7 @@ import BlogItem from "./BlogItem";
 import AddBlog from "./AddBlog";
 import ToggleForm from "./ToggleForm";
 import { initializeBlogs } from "../reducers/blogReducer";
+import { Typography, Box } from "@mui/material";
 
 const BlogList = () => {
   const [visible, setVisible] = useState(false);
@@ -18,8 +19,8 @@ const BlogList = () => {
   const toggleVisibility = () => setVisible(!visible);
 
   return (
-    <div>
-      <h2>Blog app</h2>
+    <Box component="div" m={5}>
+      <Typography variant="h3">Blog app</Typography>
       <ToggleForm
         showButtonLabel="create new blog"
         hideButtonLabel="cancel"
@@ -28,11 +29,11 @@ const BlogList = () => {
       >
         <AddBlog toggleVisibility={toggleVisibility} />
       </ToggleForm>
-      <h2>list blogs</h2>
+      <Typography variant="h4">List blogs</Typography>
       {blogs.map((blog) => (
         <BlogItem key={blog.id} blog={blog} />
       ))}
-    </div>
+    </Box>
   );
 };
 

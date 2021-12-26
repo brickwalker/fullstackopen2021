@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getUsers } from "../reducers/usersReducer";
+import { Box, Typography, List, ListItem } from "@mui/material"
 
 const UserBlogs = () => {
   const { id } = useParams();
@@ -15,14 +16,14 @@ const UserBlogs = () => {
 
   if (user) {
     return (
-      <div>
-        <h2>{user.name}</h2>
-        <ul>
+      <Box m={5}>
+        <Typography variant="h3">{user.name}</Typography>
+        <List>
           {user.blogs.map((blog) => (
-            <li key={blog.id}>{blog.title}</li>
+            <ListItem key={blog.id}><Typography>{blog.title}</Typography></ListItem>
           ))}
-        </ul>
-      </div>
+        </List>
+      </Box>
     );
   }
 

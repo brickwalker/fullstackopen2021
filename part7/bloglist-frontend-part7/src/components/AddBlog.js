@@ -3,6 +3,7 @@ import propTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { showNotification } from "../reducers/messageReducer";
 import { addBlog } from "../reducers/blogReducer";
+import { Typography, Box, TextField, Button } from "@mui/material";
 
 const AddBlog = ({ toggleVisibility }) => {
   const [title, setTitle] = useState("");
@@ -38,42 +39,36 @@ const AddBlog = ({ toggleVisibility }) => {
   };
 
   return (
-    <div>
-      <h2>create new</h2>
+    <Box component="div" mt={2}>
+      <Typography variant="h4">Create new</Typography>
       <form onSubmit={handleSubmit}>
-        <label>
-          title{" "}
-          <input
-            type="text"
-            required
-            value={title}
-            onChange={({ target }) => setTitle(target.value)}
-          />
-        </label>
+        <TextField
+          label="Title"
+          type="text"
+          required
+          value={title}
+          onChange={({ target }) => setTitle(target.value)}
+        />
         <br />
-        <label>
-          author{" "}
-          <input
-            type="text"
-            required
-            value={author}
-            onChange={({ target }) => setAuthor(target.value)}
-          />
-        </label>
+        <TextField
+          label="Author"
+          type="text"
+          required
+          value={author}
+          onChange={({ target }) => setAuthor(target.value)}
+        />
         <br />
-        <label>
-          url{" "}
-          <input
-            type="url"
-            required
-            value={url}
-            onChange={({ target }) => setUrl(target.value)}
-          />
-        </label>
+        <TextField
+          label="URL"
+          type="url"
+          required
+          value={url}
+          onChange={({ target }) => setUrl(target.value)}
+        />
         <br />
-        <button type="submit">add</button>
+        <Button type="submit" variant="contained">add</Button>
       </form>
-    </div>
+    </Box>
   );
 };
 

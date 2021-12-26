@@ -1,8 +1,15 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import { logoutUser } from "../reducers/loginReducer";
 import { showNotification } from "../reducers/messageReducer";
+import { AppBar, Toolbar, Button, Typography } from "@mui/material";
+
+const StyledLink = styled(Link)`
+  text-decoration: none;
+  color: white;
+`;
 
 const NavMenu = () => {
   const user = useSelector((state) => state.login);
@@ -19,13 +26,20 @@ const NavMenu = () => {
   };
 
   return (
-    <div>
-      <Link to="/">blogs</Link> {" "}
-      <Link to="/users">users</Link> {" "}
-      <span>
-        {user.name} is logged in <button onClick={handleLogout}>logout</button>
-      </span>
-    </div>
+    <AppBar position="static">
+      <Toolbar>
+        <StyledLink to="/">
+          <Button variant="string">blogs</Button>
+        </StyledLink>{" "}
+        <StyledLink to="/users">
+          <Button variant="string">users</Button>
+        </StyledLink>{" "}
+        <Typography variant="caption">{user.name} is logged in </Typography>
+        <Button variant="string" onClick={handleLogout}>
+          logout
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 };
 

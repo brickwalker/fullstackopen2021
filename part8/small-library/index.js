@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require("apollo-server");
+const { ApolloServer, gql, UserInputError } = require("apollo-server");
 const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const { MONGO_URI } = require("./utils/config");
@@ -82,18 +82,32 @@ const resolvers = {
       const author = await Author.find({ name: args.author });
       if (!(author && author.length)) {
         const newAuthor = new Author({ name: args.author });
-        author[0] = await newAuthor.save();
+        try {
+          author[0] = await newAuthor.save();
+        } catch (error) {
+          throw new UserInputError(error.message, { invalidArgs: args });
+        }
       }
       const book = new Book({ ...args, author: author[0]._id });
-      const newBook = await (await book.save()).populate("author");
+      let newBook;
+      try {
+        newBook = await (await book.save()).populate("author");
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args });
+      }
       return newBook;
     },
     editAuthor: async (root, args) => {
-      const author = await Author.findOneAndUpdate(
-        { name: args.name },
-        { born: args.setBornTo },
-        { new: true }
-      );
+      let author;
+      try {
+        author = await Author.findOneAndUpdate(
+          { name: args.name },
+          { born: args.setBornTo },
+          { new: true }
+        );
+      } catch (error) {
+        throw new UserInputError(error.message, { invalidArgs: args });
+      }
       return author;
     },
   },

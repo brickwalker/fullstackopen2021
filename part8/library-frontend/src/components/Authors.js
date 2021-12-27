@@ -1,9 +1,21 @@
 import React from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_AUTHORS } from "../queries";
+import { useQuery, useMutation } from "@apollo/client";
+import { ALL_AUTHORS, EDIT_BIRTH_YEAR } from "../queries";
 
 const Authors = (props) => {
   const result = useQuery(ALL_AUTHORS);
+  const [editBirthYear] = useMutation(EDIT_BIRTH_YEAR, {
+    refetchQueries: ALL_AUTHORS,
+  });
+
+  const handleAuthorYear = (event) => {
+    event.preventDefault();
+    const name = document.getElementById("by-author-name").value;
+    const year = parseInt(document.getElementById("by-year").value);
+    editBirthYear({ variables: { name, setBornTo: year } });
+    document.getElementById("by-author-name").value = "";
+    document.getElementById("by-year").value = "";
+  };
 
   if (!props.show) {
     return null;
@@ -34,6 +46,18 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
+      <h3>Set birthyear</h3>
+      <form onSubmit={handleAuthorYear}>
+        <label>
+          Name <input id="by-author-name" required />
+        </label>
+        <br />
+        <label>
+          Year <input id="by-year" type="number" required />
+        </label>
+        <br />
+        <button type="submit">update author</button>
+      </form>
     </div>
   );
 };

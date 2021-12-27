@@ -13,7 +13,6 @@ const Authors = (props) => {
     const name = document.getElementById("by-author-name").value;
     const year = parseInt(document.getElementById("by-year").value);
     editBirthYear({ variables: { name, setBornTo: year } });
-    document.getElementById("by-author-name").value = "";
     document.getElementById("by-year").value = "";
   };
 
@@ -48,9 +47,13 @@ const Authors = (props) => {
       </table>
       <h3>Set birthyear</h3>
       <form onSubmit={handleAuthorYear}>
-        <label>
-          Name <input id="by-author-name" required />
-        </label>
+        <select id="by-author-name">
+          {authors.map((author) => (
+            <option key={author.id} value={author.name}>
+              {author.name}
+            </option>
+          ))}
+        </select>
         <br />
         <label>
           Year <input id="by-year" type="number" required />

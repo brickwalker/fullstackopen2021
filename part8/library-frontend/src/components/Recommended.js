@@ -1,22 +1,24 @@
-import React from "react";
-import { useQuery } from "@apollo/client";
-import { ALL_BOOKS, CURRENT_USER } from "../queries";
+import React, { useEffect } from "react";
+import { useLazyQuery, useQuery } from "@apollo/client";
+import { CURRENT_USER, RECOMMENDED_BOOKS } from "../queries";
 
 const Recommended = (props) => {
-  const bookResponse = useQuery(ALL_BOOKS);
-  const userResponse = useQuery(CURRENT_USER);
+  const user = useQuery(CURRENT_USER);
+  const [getRecommended, recommendation] = useLazyQuery(RECOMMENDED_BOOKS);
+
+  useEffect(() => {
+    if (user.data) {
+      getRecommended({variables: {genre: user.data.me.favoriteGenre}})
+    }
+  }, [user.data, getRecommended])
 
   if (!props.show) {
     return null;
   }
 
-  if (bookResponse.loading || userResponse.loading) {
+  if (user.loading || recommendation.loading) {
     return <div>loading...</div>;
   }
-
-  const favBooks = bookResponse.data.allBooks.filter((book) =>
-    book.genres.includes(userResponse.data.me.favoriteGenre)
-  );
 
   return (
     <div>
@@ -28,7 +30,7 @@ const Recommended = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {favBooks.map((a) => (
+          {recommendation.data && recommendation.data.allBooks.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>

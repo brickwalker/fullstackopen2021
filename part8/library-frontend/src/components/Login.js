@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../queries";
 
-const Login = ({ show, setPage, setToken, setUser }) => {
+const Login = ({ show, setPage, setUser }) => {
   const [error, setError] = useState(null);
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
@@ -16,13 +16,12 @@ const Login = ({ show, setPage, setToken, setUser }) => {
       const userName = document.getElementById("login-name").value;
       const tokenValue = result.data.login.value;
       const bearerToken = `Bearer ${tokenValue}`;
-      setToken(bearerToken);
       localStorage.setItem("libraryUserName", userName);
       localStorage.setItem("libraryUserToken", bearerToken);
       setPage("authors");
       setUser(userName);
     }
-  }, [result.data, setToken, setPage, setUser]);
+  }, [result.data, setPage, setUser]);
 
   const handleLogin = (event) => {
     event.preventDefault();

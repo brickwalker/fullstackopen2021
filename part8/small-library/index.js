@@ -90,11 +90,23 @@ const resolvers = {
       return books;
     },
     allAuthors: async () => {
-      const authors = await Author.find({});
-      const books = await Book.find({});
+      const books = await Book.find({}).populate("author");
+      const authors = [];
+      for (const book of books) {
+        if (authors.length) {
+          const authorFound = authors.find(
+            (author) => author.name === book.author.name
+          );
+          if (authorFound) {
+            continue
+          }
+        }
+        authors.push(book.author);
+      }
+
       const result = authors.map((author) => {
         const authorBooks = books.filter(
-          (book) => book.author.toString() === author._id.toString()
+          (book) => book.author._id === author._id
         );
         const bookCount = authorBooks.length;
         return {

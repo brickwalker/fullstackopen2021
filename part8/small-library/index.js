@@ -4,6 +4,7 @@ const {
   UserInputError,
   AuthenticationError,
 } = require("apollo-server");
+const { PubSub } = require("graphql-subscriptions");
 const { v4: uuidv4 } = require("uuid");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
@@ -12,12 +13,18 @@ const Book = require("./models/Book");
 const Author = require("./models/Author");
 const User = require("./models/User");
 
+const pubsub = new PubSub();
+
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.log("Error connecting to MongoDB", error.message));
 
 const typeDefs = gql`
+  type Subscription {
+    bookAdded: Book!
+  }
+
   type User {
     username: String!
     favoriteGenre: String!
@@ -146,6 +153,9 @@ const resolvers = {
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args });
       }
+
+      pubsub.publish("BOOK_ADDED", { bookAdded: newBook });
+
       return newBook;
     },
 
@@ -154,7 +164,7 @@ const resolvers = {
       if (!currentUser) {
         throw new AuthenticationError("not authenticated");
       }
-      
+
       let author;
       try {
         author = await Author.findOneAndUpdate(
@@ -166,6 +176,12 @@ const resolvers = {
         throw new UserInputError(error.message, { invalidArgs: args });
       }
       return author;
+    },
+  },
+
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(["BOOK_ADDED"]),
     },
   },
 };
@@ -184,6 +200,7 @@ const server = new ApolloServer({
   },
 });
 
-server.listen().then(({ url }) => {
+server.listen().then(({ url, subscriptionsUrl }) => {
   console.log(`Server ready at ${url}`);
+  console.log(`Subscriptions ready at ${subscriptionsUrl}`);
 });

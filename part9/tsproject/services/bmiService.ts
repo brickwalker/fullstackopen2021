@@ -5,7 +5,7 @@ interface BmiInputs {
 
 export const parseBmiArgs = (args: string[]): BmiInputs => {
   const correctSyntax =
-    "Correct syntax: calculateBmi <hight in cm> <weight in kg>";
+    "Correct syntax: /bmi?height=<hight in cm>&weight=<weight in kg>";
   if (args.length !== 2)
     throw new Error("Incorrect number of arguments. " + correctSyntax);
 

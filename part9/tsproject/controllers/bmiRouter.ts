@@ -12,12 +12,12 @@ router.get("/", (req, res) => {
   const query = req.query;
 
   if (!("height" in query && "weight" in query)) {
-    res.json({ error: "malformatted params" });
+    throw new Error(`Incorrect params: ${JSON.stringify(query)}`);
   } else {
-    const checkedQuery = (query as unknown) as BmiQuery;
+    const checkedQuery = query as unknown as BmiQuery;
     const bmiArgs = parseBmiArgs([checkedQuery.height, checkedQuery.weight]);
-    const bmi = calculateBmi(bmiArgs.height, bmiArgs.weight)
-    res.json({...bmiArgs, bmi});
+    const bmi = calculateBmi(bmiArgs.height, bmiArgs.weight);
+    res.json({ ...bmiArgs, bmi });
   }
 });
 

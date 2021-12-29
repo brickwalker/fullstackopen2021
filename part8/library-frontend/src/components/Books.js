@@ -14,6 +14,10 @@ const Books = (props) => {
     return <div>loading...</div>;
   }
 
+  if (response.error) {
+    return <div>Error occurred</div>
+  }
+
   let books = response.data.allBooks;
   const uniqueGenres = [];
   books.forEach((book) =>

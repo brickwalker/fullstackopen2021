@@ -1,31 +1,55 @@
 import { gql } from "@apollo/client";
 
+const AUTHOR_DETAILS = gql`
+  fragment AuthorDetails on Author {
+    id
+    name
+    born
+  }
+`;
+
 export const ALL_AUTHORS = gql`
+  ${AUTHOR_DETAILS}
   query {
     allAuthors {
-      id
-      name
-      born
+      ...AuthorDetails
       bookCount
     }
   }
 `;
 
+export const EDIT_BIRTH_YEAR = gql`
+  ${AUTHOR_DETAILS}
+  mutation editBirthYear($name: String!, $setBornTo: Int!) {
+    editAuthor(name: $name, setBornTo: $setBornTo) {
+      ...AuthorDetails
+    }
+  }
+`;
+
+const BOOK_DETAILS = gql`
+  fragment BookDetails on Book {
+    id
+    title
+    author {
+      name
+    }
+    published
+    genres
+  }
+`;
+
 export const ALL_BOOKS = gql`
+  ${BOOK_DETAILS}
   query {
     allBooks {
-      id
-      title
-      author {
-        name
-      }
-      published
-      genres
+      ...BookDetails
     }
   }
 `;
 
 export const ADD_BOOK = gql`
+  ${BOOK_DETAILS}
   mutation addBook(
     $title: String!
     $published: Int!
@@ -38,23 +62,25 @@ export const ADD_BOOK = gql`
       author: $author
       genres: $genres
     ) {
-      id
-      title
-      published
-      author {
-        name
-      }
-      genres
+      ...BookDetails
     }
   }
 `;
 
-export const EDIT_BIRTH_YEAR = gql`
-  mutation editBirthYear($name: String!, $setBornTo: Int!) {
-    editAuthor(name: $name, setBornTo: $setBornTo) {
-      id
-      name
-      born
+export const RECOMMENDED_BOOKS = gql`
+  ${BOOK_DETAILS}
+  query getBooksByGenre($genre: String!) {
+    allBooks(genre: $genre) {
+      ...BookDetails
+    }
+  }
+`;
+
+export const BOOK_ADDED = gql`
+  ${BOOK_DETAILS}
+  subscription {
+    bookAdded {
+      ...BookDetails
     }
   }
 `;
@@ -72,20 +98,6 @@ export const CURRENT_USER = gql`
     me {
       username
       favoriteGenre
-    }
-  }
-`;
-
-export const RECOMMENDED_BOOKS = gql`
-  query getBooksByGenre($genre: String!) {
-    allBooks(genre: $genre) {
-      id
-      title
-      author {
-        name
-      }
-      published
-      genres
     }
   }
 `;

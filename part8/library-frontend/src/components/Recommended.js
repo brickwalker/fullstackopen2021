@@ -7,10 +7,10 @@ const Recommended = (props) => {
   const [getRecommended, recommendation] = useLazyQuery(RECOMMENDED_BOOKS);
 
   useEffect(() => {
-    if (user.data) {
-      getRecommended({variables: {genre: user.data.me.favoriteGenre}})
+    if (user.data && user.data.me) {
+      getRecommended({ variables: { genre: user.data.me.favoriteGenre } });
     }
-  }, [user.data, getRecommended])
+  }, [user.data, getRecommended]);
 
   if (!props.show) {
     return null;
@@ -30,13 +30,14 @@ const Recommended = (props) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {recommendation.data && recommendation.data.allBooks.map((a) => (
-            <tr key={a.id}>
-              <td>{a.title}</td>
-              <td>{a.author.name}</td>
-              <td>{a.published}</td>
-            </tr>
-          ))}
+          {recommendation.data &&
+            recommendation.data.allBooks.map((a) => (
+              <tr key={a.id}>
+                <td>{a.title}</td>
+                <td>{a.author.name}</td>
+                <td>{a.published}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

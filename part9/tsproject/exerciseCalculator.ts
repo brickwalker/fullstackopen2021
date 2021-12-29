@@ -17,6 +17,41 @@ const ratings: Rating[] = [
   { rating: 3, ratingDescription: "spot on" },
 ];
 
+interface CalcInput {
+  dailyLog: number[];
+  dailyTarget: number;
+}
+
+const parseExerciseArguments = (args: string[]): CalcInput => {
+  const correctSyntax =
+    "Correct syntax: calculateExercises <day1 exercise hrs> <day2 exercise hrs> <day... exercise hrs> <target daily hrs>";
+
+  if (process.argv.length < 4)
+    throw new Error(
+      "Less than minimum number of arguments specified. " + correctSyntax
+    );
+
+  const params = args.slice(2);
+
+  const parsedParams = params.map((arg) => {
+    const parsedArg = parseFloat(arg);
+    if (isNaN(parsedArg))
+      throw new Error(`Argument ${arg} is not a number. ` + correctSyntax);
+
+    if (0 > parsedArg || parsedArg > 24)
+      throw new Error(
+        `Daily exercise time ${arg} hrs is unrealistic. ` + correctSyntax
+      );
+
+    return parsedArg;
+  });
+
+  const dailyLog = parsedParams.slice(0, parsedParams.length - 1);
+  const dailyTarget = parsedParams[parsedParams.length - 1];
+
+  return { dailyLog, dailyTarget };
+};
+
 const exerciseCalculator = (
   dailyLog: number[],
   dailyTarget: number
@@ -43,7 +78,11 @@ const exerciseCalculator = (
   };
 };
 
-const dailyLog = [3, 0, 2, 4.5, 0, 3, 1];
-const dailyTarget = 2;
-
-console.log(exerciseCalculator(dailyLog, dailyTarget));
+try {
+  const { dailyLog, dailyTarget } = parseExerciseArguments(process.argv);
+  console.log(exerciseCalculator(dailyLog, dailyTarget));
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}

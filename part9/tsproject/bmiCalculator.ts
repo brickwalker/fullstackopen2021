@@ -1,3 +1,29 @@
+interface BmiInputs {
+  height: number;
+  weight: number;
+}
+
+const parseBmiArgs = (args: string[]): BmiInputs => {
+  const correctSyntax =
+    "Correct syntax: calculateBmi <hight in cm> <weight in kg>";
+  if (args.length !== 4)
+    throw new Error("Incorrect number of arguments. " + correctSyntax);
+
+  const height = parseFloat(args[2]);
+  const weight = parseFloat(args[3]);
+
+  if (isNaN(height) || isNaN(weight))
+    throw new Error("Numerical values should be specified. " + correctSyntax);
+
+  if (25 > height || height > 300)
+    throw new Error("Height specified is unrealistic. " + correctSyntax);
+
+  if (1 > weight || weight > 300)
+    throw new Error("Weight specified is unrealistic. " + correctSyntax);
+
+  return { height, weight };
+};
+
 const calculateBmi = (heightCm: number, weightKg: number): string => {
   const heightM = heightCm / 100;
   const BMI = weightKg / heightM ** 2;
@@ -22,4 +48,11 @@ const calculateBmi = (heightCm: number, weightKg: number): string => {
   return result;
 };
 
-console.log(calculateBmi(171, 68));
+try {
+  const { height, weight } = parseBmiArgs(process.argv);
+  console.log(calculateBmi(height, weight));
+} catch (error: unknown) {
+  if (error instanceof Error) {
+    console.log(error.message);
+  }
+}

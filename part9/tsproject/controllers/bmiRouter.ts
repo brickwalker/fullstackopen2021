@@ -12,7 +12,11 @@ router.get("/", (req, res) => {
   const query = req.query;
 
   if (!("height" in query && "weight" in query)) {
-    throw new Error(`Incorrect params: ${JSON.stringify(query)}`);
+    throw new Error(
+      `Incorrect params: ${JSON.stringify(
+        query
+      )}. Correct syntax: /bmi?height=<hight in cm>&weight=<weight in kg>`
+    );
   } else {
     const checkedQuery = query as unknown as BmiQuery;
     const bmiArgs = parseBmiArgs([checkedQuery.height, checkedQuery.weight]);

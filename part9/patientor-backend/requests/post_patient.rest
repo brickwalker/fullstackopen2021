@@ -1,0 +1,17 @@
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+    "wrong": "payload"
+}
+###
+POST http://localhost:3001/api/patients
+Content-Type: application/json
+
+{
+    "name": "Albert Gruber",
+    "dateOfBirth": "1971-05-15",
+    "ssn": "BB-123-HEX",
+    "gender": "male",
+    "occupation": "Astronomer"
+  }

@@ -10,8 +10,17 @@ patientsRouter.get("/", (_req, res) => {
 
 patientsRouter.post("/", (req, res) => {
   const patientData = req.body as Omit<Patient, "id">;
-  const newPatient = addPatient(patientData);
-  res.json(newPatient);
+  let newPatient: Omit<Patient, "ssn">;
+  try {
+    newPatient = addPatient(patientData);
+    res.json(newPatient);
+  } catch (error) {
+    let errorMessage = "Error happened. ";
+    if (error instanceof Error) {
+      errorMessage += error.message;
+    }
+    res.status(400).send(errorMessage);
+  }
 });
 
 export default patientsRouter;

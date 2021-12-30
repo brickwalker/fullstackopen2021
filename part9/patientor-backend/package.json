@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./build/index.ts",
-    "dev": "ts-node-dev ./index.ts",
+    "start": "node ./build/src/index.js",
+    "dev": "ts-node-dev ./src/index.ts",
     "build": "tsc",
     "lint": "eslint --ext .ts .",
+    "data:remove": "shx rm -rf ./data/",
+    "data:init": "shx cp -r ./backup/ ./data/",
+    "data:reset": "npm run data:remove && npm run data:init",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -21,6 +24,7 @@
     "eslint": "^8.5.0",
     "eslint-config-prettier": "^8.3.0",
     "prettier": "^2.5.1",
+    "shx": "^0.3.3",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.5.4"
   },

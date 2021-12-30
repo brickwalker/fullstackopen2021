@@ -17,42 +17,36 @@ const ratings: Rating[] = [
   { rating: 3, ratingDescription: "spot on" },
 ];
 
-interface CalcInput {
+export interface CalcInput {
   dailyLog: number[];
   dailyTarget: number;
 }
 
-const parseExerciseArguments = (args: string[]): CalcInput => {
+export const parseExerciseArguments = (args: CalcInput): CalcInput => {
   const correctSyntax =
-    "Correct syntax: calculateExercises <day1 exercise hrs> <day2 exercise hrs> <day... exercise hrs> <target daily hrs>";
+    'Correct POST payload: { "dailyLog": [1,0,2,0,3,0,2.5], "dailyTarget": 2.5 }';
 
-  if (process.argv.length < 4)
-    throw new Error(
-      "Less than minimum number of arguments specified. " + correctSyntax
-    );
+  if (!("dailyLog" in args && "dailyTarget" in args))
+    throw new Error("Malformed payload. " + correctSyntax);
 
-  const params = args.slice(2);
+  const allEntries = args.dailyLog.concat(args.dailyTarget);
 
-  const parsedParams = params.map((arg) => {
-    const parsedArg = parseFloat(arg);
-    if (isNaN(parsedArg))
-      throw new Error(`Argument ${arg} is not a number. ` + correctSyntax);
+  if (!(allEntries instanceof Array))
+    throw new Error("Incorrect data format. " + correctSyntax);
 
-    if (0 > parsedArg || parsedArg > 24)
+  allEntries.map((entry) => {
+    if (isNaN(entry))
+      throw new Error(`Entry ${entry} is not a number. ` + correctSyntax);
+    if (0 > entry || entry > 24)
       throw new Error(
-        `Daily exercise time ${arg} hrs is unrealistic. ` + correctSyntax
+        `Daily exercise time ${entry} hrs is unrealistic. ` + correctSyntax
       );
-
-    return parsedArg;
   });
 
-  const dailyLog = parsedParams.slice(0, parsedParams.length - 1);
-  const dailyTarget = parsedParams[parsedParams.length - 1];
-
-  return { dailyLog, dailyTarget };
+  return args;
 };
 
-const exerciseCalculator = (
+export const exerciseCalculator = (
   dailyLog: number[],
   dailyTarget: number
 ): ExerciseResult => {
@@ -77,12 +71,3 @@ const exerciseCalculator = (
     ratingDescription,
   };
 };
-
-try {
-  const { dailyLog, dailyTarget } = parseExerciseArguments(process.argv);
-  console.log(exerciseCalculator(dailyLog, dailyTarget));
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log(error.message);
-  }
-}

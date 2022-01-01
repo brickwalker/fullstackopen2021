@@ -5,18 +5,24 @@ import { useParams } from "react-router-dom";
 import { Container, Header, Icon } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 import { apiBaseUrl } from "./constants";
-import { setCurrentPatient, useStateValue } from "./state";
-import { Gender, Patient } from "./types";
+import { setCurrentPatient, setDiagnoses, useStateValue } from "./state";
+import { Diagnosis, Gender, Patient } from "./types";
 
 const PatientPage = () => {
-  const [{ currentPatient }, dispatch] = useStateValue();
+  const [{ currentPatient, diagnoses }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     void axios
       .get<Patient>(`${apiBaseUrl}/patients/${id}`)
       .then((response) => dispatch(setCurrentPatient(response.data)));
-  }, [dispatch]);
+  }, []);
+
+  useEffect(() => {
+    void axios
+      .get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`)
+      .then((response) => dispatch(setDiagnoses(response.data)));
+  }, []);
 
   const getIconName = (gender: Gender | undefined): SemanticICONS => {
     switch (gender) {
@@ -55,7 +61,10 @@ const PatientPage = () => {
               {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
                 <ul>
                   {entry.diagnosisCodes.map((dianosisCode) => (
-                    <li key={dianosisCode}>{dianosisCode}</li>
+                    <li key={dianosisCode}>
+                      {dianosisCode}{" "}
+                      {diagnoses.find((diag) => diag.code === dianosisCode)?.name}
+                    </li>
                   ))}
                 </ul>
               )}

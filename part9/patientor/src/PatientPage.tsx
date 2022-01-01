@@ -36,11 +36,33 @@ const PatientPage = () => {
         <Icon name={getIconName(currentPatient?.gender)} />
       </Header>
       {currentPatient &&
-        Object.keys(currentPatient).map((key) => (
-          <p key={key}>
-            <strong>{key}:</strong> {currentPatient[key as keyof Patient]}
-          </p>
-        ))}
+        Object.keys(currentPatient).map(
+          (key) =>
+            key !== "entries" && (
+              <p key={key}>
+                <strong>{key}:</strong> {currentPatient[key as keyof Patient]}
+              </p>
+            )
+        )}
+      {currentPatient?.entries && currentPatient.entries.length > 0 && (
+        <div>
+          <Header as="h3">Entries:</Header>
+          {currentPatient.entries.map((entry) => (
+            <div key={entry.id}>
+              <p>
+                {entry.date} {entry.description}
+              </p>
+              {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
+                <ul>
+                  {entry.diagnosisCodes.map((dianosisCode) => (
+                    <li key={dianosisCode}>{dianosisCode}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </Container>
   );
 };

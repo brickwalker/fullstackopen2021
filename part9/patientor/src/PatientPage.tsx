@@ -5,11 +5,12 @@ import { useParams } from "react-router-dom";
 import { Container, Header, Icon } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 import { apiBaseUrl } from "./constants";
+import PatientEntry from "./PatientEntry";
 import { setCurrentPatient, setDiagnoses, useStateValue } from "./state";
 import { Diagnosis, Gender, Patient } from "./types";
 
 const PatientPage = () => {
-  const [{ currentPatient, diagnoses }, dispatch] = useStateValue();
+  const [{ currentPatient }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -54,21 +55,7 @@ const PatientPage = () => {
         <div>
           <Header as="h3">Entries:</Header>
           {currentPatient.entries.map((entry) => (
-            <div key={entry.id}>
-              <p>
-                {entry.date} {entry.description}
-              </p>
-              {entry.diagnosisCodes && entry.diagnosisCodes.length > 0 && (
-                <ul>
-                  {entry.diagnosisCodes.map((dianosisCode) => (
-                    <li key={dianosisCode}>
-                      {dianosisCode}{" "}
-                      {diagnoses.find((diag) => diag.code === dianosisCode)?.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <PatientEntry key={entry.id} entry={entry} />
           ))}
         </div>
       )}

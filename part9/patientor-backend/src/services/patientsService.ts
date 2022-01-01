@@ -1,21 +1,18 @@
-import patientsData from "../../data/patients.json";
+import patientsData from "../../data/patientsWithEntries";
 import { Patient, PublicPatient } from "../types/types";
 import { v1 as uuidv1 } from "uuid";
 import { Gender } from "../types/types";
 
-const patients: Patient[] = patientsData.map((p) => ({
-  ...p,
-  gender: p.gender as Gender,
-  entries: [],
-}));
+const patients: Patient[] = patientsData.map((p) => ({ ...p }));
 
 export const filterPatients = (): PublicPatient[] =>
-  patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+  patients.map(({ id, name, dateOfBirth, gender, occupation, entries }) => ({
     id,
     name,
     dateOfBirth,
     gender,
     occupation,
+    entries,
   }));
 
 export const findPatient = (id: string): Patient | undefined => {

@@ -1,16 +1,30 @@
 import express from "express";
-import { filteredPatients, addPatient } from "../services/patientsService";
-import { Patient } from "../types/types";
+import {
+  filterPatients,
+  addPatient,
+  findPatient,
+} from "../services/patientsService";
+import { Patient, PublicPatient } from "../types/types";
 
 const patientsRouter = express.Router();
 
+patientsRouter.get("/:id", (req, res) => {
+  const id = req.params.id;
+  const patient = findPatient(id);
+  if (patient) {
+    res.json(patient);
+  } else {
+    res.json({ error: `Patient with id ${id} not found.` });
+  }
+});
+
 patientsRouter.get("/", (_req, res) => {
-  res.json(filteredPatients());
+  res.json(filterPatients());
 });
 
 patientsRouter.post("/", (req, res) => {
   const patientData = req.body as Omit<Patient, "id">;
-  let newPatient: Omit<Patient, "ssn">;
+  let newPatient: PublicPatient;
   try {
     newPatient = addPatient(patientData);
     res.json(newPatient);

@@ -1,14 +1,15 @@
 import patientsData from "../../data/patients.json";
-import { Patient } from "../types/types";
+import { Patient, PublicPatient } from "../types/types";
 import { v1 as uuidv1 } from "uuid";
 import { Gender } from "../types/types";
 
 const patients: Patient[] = patientsData.map((p) => ({
   ...p,
   gender: p.gender as Gender,
+  entries: [],
 }));
 
-export const filteredPatients = (): Omit<Patient, "ssn">[] =>
+export const filterPatients = (): PublicPatient[] =>
   patients.map(({ id, name, dateOfBirth, gender, occupation }) => ({
     id,
     name,
@@ -17,9 +18,13 @@ export const filteredPatients = (): Omit<Patient, "ssn">[] =>
     occupation,
   }));
 
+export const findPatient = (id: string): Patient | undefined => {
+  return patients.find((patient) => patient.id === id);
+};
+
 export const addPatient = (
   patientObject: Omit<Patient, "id">
-): Omit<Patient, "ssn"> => {
+): PublicPatient => {
   if (!validatePatientData(patientObject))
     throw new Error(
       "Patient data validation not passed. Entry cannot be created."

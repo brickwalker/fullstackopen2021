@@ -10,7 +10,7 @@ export type State = {
 
 const initialState: State = {
   patients: {},
-  currentPatient: null
+  currentPatient: null,
 };
 
 export const StateContext = createContext<[State, React.Dispatch<Action>]>([
@@ -35,3 +35,15 @@ export const StateProvider: React.FC<StateProviderProps> = ({
   );
 };
 export const useStateValue = () => useContext(StateContext);
+
+export const setPatientList = (patientListFromApi: Patient[]): Action => {
+  return { type: "SET_PATIENT_LIST", payload: patientListFromApi };
+};
+
+export const setCurrentPatient = (currentPatientFromApi: Patient): Action => {
+  return { type: "SET_CURRENT_PATIENT", payload: currentPatientFromApi };
+};
+
+export const addPatient = (newPatient: Patient): Action => {
+  return { type: "ADD_PATIENT", payload: newPatient };
+};

@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { Container, Header, Icon } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 import { apiBaseUrl } from "./constants";
-import { useStateValue } from "./state";
+import { setCurrentPatient, useStateValue } from "./state";
 import { Gender, Patient } from "./types";
 
 const PatientPage = () => {
@@ -15,9 +15,7 @@ const PatientPage = () => {
   useEffect(() => {
     void axios
       .get<Patient>(`${apiBaseUrl}/patients/${id}`)
-      .then((response) =>
-        dispatch({ type: "SET_CURRENT_PATIENT", payload: response.data })
-      );
+      .then((response) => dispatch(setCurrentPatient(response.data)));
   }, [dispatch]);
 
   const getIconName = (gender: Gender | undefined): SemanticICONS => {

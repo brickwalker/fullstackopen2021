@@ -3,10 +3,22 @@ import {
   filterPatients,
   addPatient,
   findPatient,
+  addEntry,
 } from "../services/patientsService";
-import { Patient, PublicPatient } from "../types/types";
+import { Patient, PublicPatient, Entry } from "../types/types";
 
 const patientsRouter = express.Router();
+
+patientsRouter.post("/:id/entries", (req, res) => {
+  const patientId = req.params.id;
+  const entry = req.body as Omit<Entry, "id">;
+  const addedEntry = addEntry(patientId, entry);
+  if (addedEntry) {
+    res.json(addedEntry);
+  } else {
+    res.json({ error: `Entry cannot be added: ${JSON.stringify(entry)}` });
+  }
+});
 
 patientsRouter.get("/:id", (req, res) => {
   const id = req.params.id;

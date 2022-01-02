@@ -1,0 +1,35 @@
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "description": "Hurt his nostrill",
+    "date": "2021-04-25",
+    "specialist": "Hans Zimmer",
+    "type": "OccupationalHealthcare",
+    "employerName": "FBI"
+}
+###
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "description": "Hurt his nostrill",
+    "date": "2021-04-25",
+    "specialist": "Hans Zimmer",
+    "type": "HealthCheck",
+    "healthCheckRating": 2
+}
+###
+POST http://localhost:3001/api/patients/d27736ec-f723-11e9-8f0b-362b9e155667/entries
+Content-Type: application/json
+
+{
+    "description": "Hurt his nostrill",
+    "date": "2021-04-25",
+    "specialist": "Hans Zimmer",
+    "type": "Hospital",
+    "discharge": {
+        "date": "2021-05-23",
+        "criteria": "Healthy now"
+    }
+}

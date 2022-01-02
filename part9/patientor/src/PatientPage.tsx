@@ -1,15 +1,17 @@
 import axios from "axios";
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Header, Icon } from "semantic-ui-react";
+import { Container, Header, Icon, Button } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
+import AddEntryModal from "./AddEntryModal";
 import { apiBaseUrl } from "./constants";
 import PatientEntry from "./PatientEntry";
 import { setCurrentPatient, setDiagnoses, useStateValue } from "./state";
 import { Diagnosis, Gender, Patient } from "./types";
 
 const PatientPage = () => {
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [{ currentPatient }, dispatch] = useStateValue();
   const { id } = useParams<{ id: string }>();
 
@@ -51,6 +53,9 @@ const PatientPage = () => {
               </p>
             )
         )}
+      <Button onClick={() => setModalOpen(!modalOpen)}>Add New Entry</Button>
+      <AddEntryModal modalOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <div className="ui hidden section divider"></div>
       {currentPatient?.entries && currentPatient.entries.length > 0 && (
         <div>
           <Header as="h3">Entries:</Header>

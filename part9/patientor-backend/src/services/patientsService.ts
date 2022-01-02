@@ -38,7 +38,7 @@ export const addPatient = (
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const id = uuidv1();
-  const newPatient = { ...patientObject, id };
+  const newPatient = { ...patientObject, id, entries: [] };
   patients.push(newPatient);
   // Using destructuring to remove property
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
